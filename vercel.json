@@ -1,0 +1,42 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/services/capital-readiness",
+      "destination": "/services/funding-restructuring-advisory",
+      "permanent": true
+    },
+    {
+      "source": "/services/funding-capital",
+      "destination": "/services/funding-restructuring-advisory",
+      "permanent": true
+    },
+    {
+      "source": "/services/capital-restructuring-advisory",
+      "destination": "/services/funding-restructuring-advisory",
+      "permanent": true
+    },
+    {
+      "source": "/services/restructuring-recovery",
+      "destination": "/services/funding-restructuring-advisory",
+      "permanent": true
+    },
+    {
+      "source": "/services/business-funding-advisory",
+      "destination": "/services/funding-restructuring-advisory",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    }
+  ]
+}
