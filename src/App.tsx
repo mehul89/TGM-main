@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { WhatsAppFloat } from './components/WhatsAppFloat';
+import { TgmConcierge } from './components/TgmConcierge';
 import { HomePage } from './pages/HomePage';
 import { ServicePage } from './pages/ServicePage';
 import { PartnersPage } from './pages/PartnersPage';
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
-      <WhatsAppFloat />
+      <TgmConcierge />
     </>
   );
 };

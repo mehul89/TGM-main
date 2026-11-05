@@ -262,7 +262,7 @@ export const HomePage: React.FC = () => {
               ref={heroImgRef}
               src="/assets/img/dubai-skyline-hero.jpg"
               alt=""
-              fetchPriority="high"
+              {...{ fetchpriority: 'high' }}
               decoding="async"
               className="hero-bg-img"
               onLoad={() => setHeroImgLoaded(true)}
