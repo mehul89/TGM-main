@@ -276,7 +276,7 @@ export const HomePage: React.FC = () => {
         <div className="wrap">
           <div className="hero-content-centered">
             <p className="eyebrow on-dark hero-eyebrow">
-              Dubai · Tanzania · Zambia · Mozambique
+              UAE · Africa · India
             </p>
 
             <h1
