@@ -20,6 +20,7 @@ export const Header: React.FC = () => {
   }, []);
 
   const isAfrica = path === '/services/africa-corridor';
+  const isAbout = path === '/about';
   const isPartners = path === '/partners';
   const isContact = path === '/contact';
   const isServices = path.startsWith('/services') || (path === '/' && location.hash === '#services');
@@ -76,6 +77,13 @@ export const Header: React.FC = () => {
               aria-current={isAfrica ? 'page' : undefined}
             >
               UAE–Africa
+            </Link>
+            <Link
+              to="/about"
+              className="nav-link"
+              aria-current={isAbout ? 'page' : undefined}
+            >
+              About
             </Link>
             <Link
               to="/partners"
@@ -229,6 +237,18 @@ export const Header: React.FC = () => {
             }}
           >
             UAE–Africa Corridor
+          </Link>
+          <Link
+            to="/about"
+            onClick={closeMobile}
+            style={{
+              color: 'var(--ivory)',
+              fontSize: '17px',
+              fontWeight: 600,
+              padding: '8px 0',
+            }}
+          >
+            About
           </Link>
           <Link
             to="/partners"

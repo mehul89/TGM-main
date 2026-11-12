@@ -25,7 +25,7 @@ export const PARTNERS: PartnerProfile[] = [
     eyebrow: "UAE · Tanzania · Zambia · Mozambique",
     eyebrowClass: "eyebrow africa",
     name: "CA Yogesh Pannalal Trivedi",
-    role: "Founding Partner · Finance review & Fractional CFO",
+    role: "Founder · Finance review & Fractional CFO",
     partnerIntro:
       "Chartered Accountant (ICAI, 2008). 18 years running finance from inside trading, fit-out, logistics, petroleum and education groups. He checks your accountant and your software, then builds the controls that keep them honest.",
     introHtml: `
@@ -44,7 +44,7 @@ export const PARTNERS: PartnerProfile[] = [
       ["Lower funding cost", "capital project borrowing moved from local currency to USD, Mozambique"],
     ],
     timeline: [
-      ["2026 – now", "Founding Partner, TGM Accounting & Auditing LLC, Dubai"],
+      ["2026 – now", "Founder, TGM Accounting & Auditing LLC, Dubai"],
       ["2025 – 2026", "Group Finance Manager, Joga Ram Group, Dubai — building materials, joinery, fit-out"],
       ["2021 – 2025", "CFO, Eaglite General Trading, Dubai — fractional, then full-time; three-country trading group"],
       ["2022", "Fractional CFO, Lake Trans Logistics — five East African countries"],

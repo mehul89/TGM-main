@@ -147,9 +147,9 @@ export const ServicePage: React.FC = () => {
         <section className="sec sec-forest-dark">
           <div className="wrap corridor">
             <div>
-              <p className="eyebrow on-dark">In-Country Footprint</p>
+              <p className="eyebrow on-dark">In-Country Footprint &amp; Industrial Operations</p>
               <h2 className="h2" style={{ marginBottom: '20px' }}>
-                Three sovereign jurisdictions, backed by direct operating tenure.
+                Connecting All UAE Freezones &amp; Mainland to East &amp; Southern Africa.
               </h2>
               <p
                 style={{
@@ -159,7 +159,7 @@ export const ServicePage: React.FC = () => {
                   color: 'rgba(255, 242, 223, 0.9)',
                 }}
               >
-                In-country Group Finance Controller and Finance Manager roles in Tanzania and Mozambique; active cross-border treasury in Zambia; fractional CFO governance across five East African markets. We only represent jurisdictions where a partner has managed ledgers on the ground.
+                In-country Group Finance Controller and Finance Manager leadership across Tanzania, Zambia, and Mozambique; regional cross-border treasury across Kenya, Uganda, and South Africa. We work across all Freezones and Mainland corporate hubs in the UAE, advising heavy industrial, trading, manufacturing, and logistics groups.
               </p>
               <div className="facts">
                 <div>
@@ -177,6 +177,24 @@ export const ServicePage: React.FC = () => {
               </div>
             </div>
             <div>
+              <div
+                style={{
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '1px solid var(--border-gold)',
+                  marginBottom: '20px',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.35)',
+                }}
+              >
+                <img
+                  src="/assets/img/uae-africa-industrial-corridor.jpg"
+                  alt="UAE Freezones &amp; Mainland connected to East and Southern African industrial operations"
+                  width={800}
+                  height={533}
+                  loading="lazy"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </div>
               <CorridorMap />
             </div>
           </div>

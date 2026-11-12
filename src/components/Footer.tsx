@@ -17,6 +17,12 @@ export const Footer: React.FC = () => {
             <p className="foot-desc">
               {SITE_CONFIG.address}
             </p>
+            <p className="foot-licence-text" style={{ fontSize: '13px', color: 'var(--gold-light)', margin: '8px 0 16px', letterSpacing: '0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Dubai mainland · Licence No. {SITE_CONFIG.licence}</span>
+            </p>
             <div className="foot-contact-pills">
               <a href={`tel:${SITE_CONFIG.phoneTel}`} className="foot-contact-pill">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--gold-light)' }}>
@@ -50,6 +56,9 @@ export const Footer: React.FC = () => {
           <div>
             <p className="foot-heading">The Firm</p>
             <ul>
+              <li>
+                <Link to="/about">About TGM</Link>
+              </li>
               <li>
                 <Link to="/partners">Partners Profile</Link>
               </li>
@@ -109,7 +118,7 @@ export const Footer: React.FC = () => {
         {/* Foot Base */}
         <div className="foot-base">
           <span>
-            © 2026 TGM Accounting &amp; Auditing LLC · Dubai Mainland · Commercial Licence {SITE_CONFIG.licence}
+            © 2026 TGM Accounting &amp; Auditing LLC · Dubai mainland · Licence No. {SITE_CONFIG.licence}
           </span>
           <span className="regions">
             UAE · Africa · India

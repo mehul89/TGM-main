@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TgmConcierge } from './components/TgmConcierge';
 import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
 import { ServicePage } from './pages/ServicePage';
 import { PartnersPage } from './pages/PartnersPage';
 import { ContactPage } from './pages/ContactPage';
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/services/:slug" element={<ServicePage />} />
         <Route path="/partners" element={<PartnersPage />} />
         <Route path="/contact" element={<ContactPage />} />

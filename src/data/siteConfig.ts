@@ -6,6 +6,6 @@ export const SITE_CONFIG = {
   wa: "https://wa.me/971553310567",
   address: "Office No 5, 206–207, Second Floor, Atrium Centre, Khalid Al Waleed Street, Al Mankhool, Dubai, UAE",
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Atrium+Centre+Khalid+Al+Waleed+Street+Al+Mankhool+Dubai",
-  licence: "[licence number]",
+  licence: "1432816",
   hours: "Monday – Friday, 9:00 – 18:00 (Gulf Standard Time)",
 };

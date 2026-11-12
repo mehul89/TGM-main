@@ -396,8 +396,8 @@ export const SERVICES: ServiceItem[] = [
     title: "UAE–Africa finance: Tanzania, Zambia & Mozambique",
     eyebrow: "UAE–Africa corridor",
     h1: "Finance on both sides of the Indian Ocean.",
-    lead: "For UAE businesses operating in Tanzania, Zambia or Mozambique — and African businesses setting up in Dubai. Run by a partner who led finance from inside businesses in Dar es Salaam, Lusaka and Maputo.",
-    meta: "UAE–Africa finance services from Dubai: cross-border group finance, tax environment briefings for Tanzania (TRA), Zambia (ZRA) and Mozambique (AT), and remote finance team oversight.",
+    lead: "We work across all UAE Freezones and Mainland corporate hubs, seamlessly connecting with operating entities across the East and Southern African continent (Tanzania, Zambia, Mozambique, Kenya, South Africa). Run by partners who led finance and industrial operations from inside operating businesses.",
+    meta: "UAE–Africa finance services from Dubai: cross-border group finance across all UAE Freezones & Mainland and East & Southern African continent, tax briefings for Tanzania (TRA), Zambia (ZRA) and Mozambique (AT), and industrial team oversight.",
     tiles: [
       "Cross-border group finance",
       "TRA · ZRA · AT briefings",

@@ -2,25 +2,127 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CorridorMapSection } from '../components/CorridorMapSection';
 import { SERVICES } from '../data/services';
 import { SITE_CONFIG } from '../data/siteConfig';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PillarIconT: React.FC = () => (
+  <svg
+    viewBox="0 0 80 80"
+    width="52"
+    height="52"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="pillar-svg"
+    aria-hidden="true"
+  >
+    {/* TGM Classic Serif T */}
+    <path
+      d="M16 20h48v7.5h-7.5c-2.4 0-3.6-1.2-4.2-3.4h-10v35.5c0 3 1.2 4.2 4.2 4.5V66H33.5v-2.2c3-0.3 4.2-1.5 4.2-4.5V24.1H27.7c-0.6 2.2-1.8 3.4-4.2 3.4H16V20z"
+      fill="#FFF2DF"
+    />
+  </svg>
+);
+
+const PillarIconG: React.FC = () => (
+  <svg
+    viewBox="0 0 80 80"
+    width="52"
+    height="52"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="pillar-svg"
+    aria-hidden="true"
+  >
+    {/* Central Globe Counter Motif matching TGM Logo */}
+    <g transform="translate(36, 42)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#C59F5A" strokeWidth="1.6" />
+      <line x1="-15" y1="0" x2="15" y2="0" stroke="#C59F5A" strokeWidth="1.2" opacity="0.8" />
+      <path d="M-13 -7 Q0 -4.5 13 -7" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.65" />
+      <path d="M-13 7 Q0 4.5 13 7" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.65" />
+      <line x1="0" y1="-15" x2="0" y2="15" stroke="#C59F5A" strokeWidth="1.2" opacity="0.8" />
+      <ellipse cx="0" cy="0" rx="8" ry="15" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.75" />
+      <path
+        d="M-4 -8 C-2 -6, 2 -5, 3 -2 C4 2, 2 6, 0 8.5 C-3 6, -5 2, -4 -3 Z"
+        fill="#DFBA79"
+        opacity="0.4"
+      />
+    </g>
+
+    {/* TGM Serif Capital G outer bowl */}
+    <path
+      d="M62 25.5c-3.2-6.5-9.2-10.5-19-10.5-15 0-26 11-26 25s11 25 26.5 25c12.5 0 20.8-6.5 22.5-18H44v-6.5h29v1.2c0 8.5-3.5 16-9.5 20.8-6 4.8-14.2 7.5-23.5 7.5C18.5 70 6 56.5 6 40S18.5 10 38 10c11.5 0 20.5 5 26.5 13l-2.5 2.5z"
+      fill="#FFF2DF"
+    />
+  </svg>
+);
+
+const PillarIconM: React.FC = () => (
+  <svg
+    viewBox="0 0 80 80"
+    width="52"
+    height="52"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="pillar-svg"
+    aria-hidden="true"
+  >
+    {/* Left vertical stem with classic serifs */}
+    <path
+      d="M13 63h11v-2.2c-2.6-0.3-3.8-1.5-3.8-4V25c0-2.5 1.2-3.7 3.8-4V18.8H10.5V21c2.6 0.3 3.8 1.5 3.8 4v31.8c0 2.5-1.2 3.7-3.8 4V63h2.5z"
+      fill="#FFF2DF"
+    />
+    {/* Left diagonal */}
+    <path d="M21 24.5 L36 56 H39.5 L27 21 H22.5 Z" fill="#FFF2DF" />
+
+    {/* 3 Ascending Bar Chart Pillars inside M (Financial Metrics) */}
+    <rect x="40.5" y="44" width="3.4" height="13" rx="0.8" fill="#C59F5A" />
+    <rect x="46" y="37" width="3.4" height="20" rx="0.8" fill="#C59F5A" />
+    <rect x="51.5" y="30" width="3.4" height="27" rx="0.8" fill="#DFBA79" />
+
+    {/* Upward Trend Arc Swooping Up to Arrowhead ↗ from TGM Logo */}
+    <path
+      d="M31.5 56.5 C40 45, 51 29, 66.5 15.5"
+      stroke="#DFBA79"
+      strokeWidth="3.6"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M55.5 13.5 L69 13 L67 26.5 L62.5 21 L55.5 13.5 Z"
+      fill="#DFBA79"
+    />
+
+    {/* Right vertical stem with classic serifs */}
+    <path
+      d="M63 63h11v-2.2c-2.6-0.3-3.8-1.5-3.8-4V32.5c0-2.5 1.2-3.7 3.8-4V26.3H60.5v2.2c2.6 0.3 3.8 1.5 3.8 4v24.5c0 2.5-1.2 3.7-3.8 4V63h2.5z"
+      fill="#FFF2DF"
+    />
+  </svg>
+);
+
 const PHILOSOPHY_PILLARS = [
   {
-    num: '01',
-    title: 'Transparency',
+    id: 'transparency',
+    letter: 'T',
+    restOfTitle: 'ransparency',
+    tagline: 'Radical Balance Sheet Clarity',
     desc: 'True numbers hold up under any external scrutiny. We bring radical clarity to financial records, intercompany ledgers, and inventory balances, eliminating hidden liabilities and giving owners unambiguous visibility.',
   },
   {
-    num: '02',
-    title: 'Governance',
+    id: 'governance',
+    letter: 'G',
+    restOfTitle: 'overnance',
+    tagline: 'Institutional Controls & Asset Protection',
     desc: 'Rigorous institutional controls that safeguard company assets. We institute strict delegation of authority, scheduled automated reconciliations, and fraud detection protocols that operate every single month.',
   },
   {
-    num: '03',
-    title: 'Materiality',
+    id: 'materiality',
+    letter: 'M',
+    restOfTitle: 'ateriality',
+    tagline: 'Dirham-Valued Strategic Remediation',
     desc: 'Directing leadership attention strictly to what moves the commercial needle. Every finding in our reviews is rated by severity and valued in UAE dirhams, ensuring management capitalizes on high-yield remediations first.',
   },
 ];
@@ -54,20 +156,20 @@ const APPROACH_STEPS = [
 
 const DUBAI_ADVANTAGES = [
   {
-    title: 'Global Commercial Gateway',
-    desc: 'Connecting Dubai to established trading hubs across East Africa and South Asia with world-class logistics and legal frameworks.',
+    title: 'All UAE Freezones & Mainland Hubs',
+    desc: 'Full-spectrum corporate tax, Qualifying Free Zone Person (QFZP) substance, and statutory audit readiness across DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, and Mainland corporate registries.',
   },
   {
-    title: 'Evolving Tax & Substance Standards',
-    desc: 'Navigating UAE Corporate Tax, Qualifying Free Zone Person (QFZP) rules, and FTA transfer pricing requirements with Chartered Accountant precision.',
+    title: 'East & Southern African Continent',
+    desc: 'On-the-ground operational finance and tax leadership across Tanzania, Zambia, Mozambique, Kenya, Uganda, and South Africa — managing in-country VAT, cross-border customs, and multi-currency treasury.',
   },
   {
-    title: 'Lender & Banking Readiness',
-    desc: 'Preparing underwriting files and covenants designed specifically to satisfy UAE tier-1 commercial bank credit committees.',
+    title: 'Industrial & Trade Supply Chains',
+    desc: 'Institutional financial controls engineered for capital-intensive operating sectors: international trade, port cargo logistics, manufacturing plants, contracting, energy distribution, and agro-commodities.',
   },
   {
-    title: 'Bilateral Corridor Execution',
-    desc: 'Providing continuous group finance governance across the UAE and operating subsidiaries in Tanzania, Zambia, and Mozambique.',
+    title: 'Cross-Border Banking & Facilities',
+    desc: 'Structuring lender-grade banking files, letters of credit (LCs), trade finance lines, and collateral covenants that satisfy tier-1 UAE and African commercial bank credit committees.',
   },
 ];
 
@@ -102,13 +204,6 @@ export const HomePage: React.FC = () => {
           { opacity: 0, scale: 1.08 },
           { opacity: 1, scale: 1.0, duration: 1.4, ease: 'power2.out' }
         )
-        // Eyebrow location badge
-        .fromTo(
-          '.hero-eyebrow',
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.65 },
-          '-=0.85'
-        )
         // 2. Sequence the headline words with staggered upward motion
         .fromTo(
           '.hero-word',
@@ -121,7 +216,7 @@ export const HomePage: React.FC = () => {
             stagger: 0.08,
             ease: 'power3.out',
           },
-          '-=0.45'
+          '-=0.75'
         )
         // 3. Followed by description appearing with a subtle upward motion
         .fromTo(
@@ -136,13 +231,6 @@ export const HomePage: React.FC = () => {
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: 'power2.out' },
           '-=0.4'
-        )
-        // 5. Scroll indicator fades in
-        .fromTo(
-          '.scroll-indicator',
-          { opacity: 0 },
-          { opacity: 1, duration: 0.8, ease: 'power1.out' },
-          '-=0.2'
         );
 
       // 2. Timeline Progress Bar ScrollTrigger
@@ -275,10 +363,6 @@ export const HomePage: React.FC = () => {
 
         <div className="wrap">
           <div className="hero-content-centered">
-            <p className="eyebrow on-dark hero-eyebrow">
-              UAE · Africa · India
-            </p>
-
             <h1
               className="h1 hero-headline"
               style={{ maxWidth: '880px', marginBottom: '24px' }}
@@ -319,38 +403,35 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Animated Scroll Indicator */}
-        <div
-          className="scroll-indicator"
-          onClick={scrollToExpertise}
-          role="button"
-          tabIndex={0}
-          aria-label="Scroll to explore"
-        >
-          <div className="scroll-indicator-mouse" />
-          <span>Scroll to explore</span>
-        </div>
       </section>
 
       {/* ==================== 2. BRAND PHILOSOPHY (WARM IVORY) ==================== */}
       <section className="sec-philosophy">
         <div className="wrap">
-          <div className="sec-head reveal-on-scroll" style={{ textAlign: 'center', margin: '0 auto 52px' }}>
-            <p className="eyebrow forest">Brand Philosophy</p>
-            <h2 className="h2" style={{ color: 'var(--forest-deep)' }}>
-              More Than Compliance. A Commitment to Better Governance.
-            </h2>
-            <p className="lead" style={{ margin: '16px auto 0', color: 'var(--text-muted)' }}>
+          <div className="sec-head reveal-on-scroll">
+            <h2 className="sec-heading">Brand Philosophy</h2>
+            <p className="sec-subheading">More Than Compliance. A Commitment to Better Governance.</p>
+            <p className="sec-body">
               We believe that enterprise resilience stems from institutional clarity. Our core ethos is anchored in three non-negotiable principles:
             </p>
           </div>
 
           <div className="grid g3">
             {PHILOSOPHY_PILLARS.map((pillar) => (
-              <div key={pillar.num} className="pillar-card">
-                <div className="pillar-num">{pillar.num}</div>
-                <h3>{pillar.title}</h3>
-                <p>{pillar.desc}</p>
+              <div key={pillar.id} className="pillar-card">
+                <div className="pillar-badge" aria-hidden="true">
+                  {pillar.id === 'transparency' && <PillarIconT />}
+                  {pillar.id === 'governance' && <PillarIconG />}
+                  {pillar.id === 'materiality' && <PillarIconM />}
+                </div>
+                <p className="pillar-tagline">{pillar.tagline}</p>
+                <h3 className="pillar-title">
+                  <span className={`pillar-initial font-${pillar.letter.toLowerCase()}`}>
+                    {pillar.letter}
+                  </span>
+                  {pillar.restOfTitle}
+                </h3>
+                <p className="pillar-desc">{pillar.desc}</p>
               </div>
             ))}
           </div>
@@ -378,22 +459,25 @@ export const HomePage: React.FC = () => {
           <div className="about-split">
             {/* Editorial Introduction */}
             <div className="reveal-on-scroll">
-              <p className="eyebrow forest">About TGM</p>
-              <h2 className="h2" style={{ color: 'var(--forest-deep)', marginBottom: '24px' }}>
-                A New Perspective on Corporate Excellence.
-              </h2>
-              <p style={{ fontSize: '16px', lineHeight: '28px', color: 'var(--text-dark)', marginBottom: '18px' }}>
-                Headquartered in Dubai and operating across key commercial corridors in East Africa, TGM Accounting &amp; Auditing bridges the critical divide between standard compliance bookkeeping and senior executive leadership.
-              </p>
-              <p style={{ fontSize: '16px', lineHeight: '28px', color: 'var(--text-muted)', marginBottom: '28px' }}>
-                Founded by seasoned Chartered Accountants and corporate bankers with over 18 years inside multi-jurisdictional trading, contracting, and logistics groups, we don't advise from afar. We have closed books, led in-country finance teams, faced revenue authorities, and structured multi-million dirham corporate credit lines from inside operating entities.
-              </p>
+              <div className="sec-head left-aligned" style={{ marginBottom: '28px' }}>
+                <h2 className="sec-heading">About TGM</h2>
+                <p className="sec-subheading">A New Perspective on Corporate Excellence.</p>
+                <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)', marginBottom: '14px' }}>
+                  Headquartered in Dubai and actively advising across key commercial and industrial corridors in the East and Southern African continent, TGM Accounting &amp; Auditing bridges the critical divide between standard compliance bookkeeping and senior executive leadership.
+                </p>
+                <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)', marginBottom: '14px' }}>
+                  We work across all Freezones (including DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, Meydan) and Mainland corporate hubs in the UAE, while managing extensive cross-border finance, group consolidation, and trade compliance across Tanzania, Zambia, Mozambique, Kenya, and South Africa.
+                </p>
+                <p className="sec-body left-aligned" style={{ color: 'var(--text-muted)' }}>
+                  Founded by seasoned Chartered Accountants and corporate bankers with over 18 years inside multi-jurisdictional trading, manufacturing, contracting, and logistics groups, we don't advise from afar. We have closed books, led in-country finance teams, faced revenue authorities, and structured multi-million dirham corporate credit lines from inside operating entities.
+                </p>
+              </div>
 
               <div
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: '20px',
+                  gap: '16px',
                   padding: '24px 0',
                   borderTop: '1px solid var(--border-light)',
                   borderBottom: '1px solid var(--border-light)',
@@ -401,16 +485,16 @@ export const HomePage: React.FC = () => {
                 }}
               >
                 <div>
-                  <span className="mono" style={{ fontSize: '28px', color: 'var(--forest)', fontWeight: 600 }}>18+</span>
-                  <span style={{ display: 'block', fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>Years Operating Experience</span>
+                  <span className="mono" style={{ fontSize: '26px', color: 'var(--forest)', fontWeight: 600 }}>18+</span>
+                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>Years Operating Experience</span>
                 </div>
                 <div>
-                  <span className="mono" style={{ fontSize: '28px', color: 'var(--forest)', fontWeight: 600 }}>4</span>
-                  <span style={{ display: 'block', fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>Core Sovereign Corridors</span>
+                  <span className="mono" style={{ fontSize: '18px', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>All Freezones</span>
+                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>&amp; UAE Mainland Hubs</span>
                 </div>
                 <div>
-                  <span className="mono" style={{ fontSize: '28px', color: 'var(--forest)', fontWeight: 600 }}>100%</span>
-                  <span style={{ display: 'block', fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>Clean Audit Readiness</span>
+                  <span className="mono" style={{ fontSize: '18px', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>East &amp; Southern</span>
+                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>African Continent Footprint</span>
                 </div>
               </div>
 
@@ -431,24 +515,33 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
 
-            {/* Real Dubai Corporate Photography */}
+            {/* UAE–Africa Industrial & Corporate Corridor Photography */}
             <div className="reveal-on-scroll">
               <div className="about-image-frame">
                 <img
-                  src="/assets/img/dubai-sunset.jpg"
-                  alt="Modern Dubai corporate architecture and international business skyline"
+                  src="/assets/img/uae-africa-industrial-corridor.jpg"
+                  alt="UAE Freezones and Mainland corporate hubs connected with East and Southern African industrial operations, manufacturing, and leadership"
                   width={2000}
-                  height={1333}
+                  height={1500}
                   loading="lazy"
                 />
                 <div className="about-stat-overlay">
-                  <div>
-                    <b>DIFC &amp; Mainland</b>
-                    <span>Corporate Hub</span>
+                  <div className="stat-cols">
+                    <div className="stat-col">
+                      <b>All UAE Freezones &amp; Mainland</b>
+                      <span>DIFC · ADGM · DMCC · JAFZA · Mainland</span>
+                    </div>
+                    <div className="stat-col">
+                      <b>East &amp; Southern Africa</b>
+                      <span>Tanzania · Zambia · Mozambique · S. Africa</span>
+                    </div>
                   </div>
-                  <div>
-                    <b>East Africa</b>
-                    <span>Operational Footprint</span>
+                  <div className="corridor-chips">
+                    <span>Industrial Logistics</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Heavy Manufacturing</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Trade Finance</span>
                   </div>
                 </div>
               </div>
@@ -461,11 +554,9 @@ export const HomePage: React.FC = () => {
       <section id="expertise" className="sec-expertise">
         <div className="wrap">
           <div className="sec-head">
-            <p className="eyebrow on-dark">Practice Areas</p>
-            <h2 className="h2" style={{ color: 'var(--ivory)' }}>
-              Comprehensive Corporate &amp; Governance Expertise
-            </h2>
-            <p className="lead on-dark" style={{ marginTop: '16px' }}>
+            <h2 className="sec-heading on-dark">Practice Areas</h2>
+            <p className="sec-subheading on-dark">Comprehensive Corporate &amp; Governance Expertise.</p>
+            <p className="sec-body on-dark">
               Eight core disciplines engineered to protect your balance sheet, ensure bulletproof compliance, and accelerate sustainable commercial growth.
             </p>
           </div>
@@ -501,17 +592,18 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ==================== 5. DUBAI ADVANTAGE (REAL DIFC ARCHITECTURE) ==================== */}
+      {/* ==================== 5. OPERATIONAL CORRIDOR & GLOBAL MAP (UAE · AFRICA · INDIA) ==================== */}
+      <CorridorMapSection />
+
+      {/* ==================== 6. STRATEGIC JURISDICTION & TRADE CORRIDORS ==================== */}
       <section className="sec-dubai-advantage">
         <div className="dubai-advantage-bg" aria-hidden="true" />
         <div className="wrap">
-          <div className="sec-head reveal-on-scroll" style={{ maxWidth: '820px' }}>
-            <p className="eyebrow on-dark">Strategic Jurisdiction</p>
-            <h2 className="h2" style={{ color: 'var(--ivory)' }}>
-              Rooted in Dubai. Connected to Global Opportunities.
-            </h2>
-            <p className="lead on-dark" style={{ marginTop: '18px' }}>
-              Dubai stands as the preeminent international hub linking GCC capital, South Asian commerce, and rapidly expanding African markets. TGM provides the financial infrastructure to navigate this global crossroads with certainty.
+          <div className="sec-head reveal-on-scroll">
+            <h2 className="sec-heading on-dark">Strategic Jurisdiction &amp; Corridors</h2>
+            <p className="sec-subheading on-dark">UAE Freezones &amp; Mainland Linked to East &amp; Southern Africa.</p>
+            <p className="sec-body on-dark">
+              We work across all UAE freezones and mainland corporate hubs, providing institutional financial governance, cross-border tax optimization, and trade finance infrastructure connecting GCC capital with thriving industrial markets across the East and Southern African continent.
             </p>
           </div>
 
@@ -530,11 +622,9 @@ export const HomePage: React.FC = () => {
       <section className="sec-approach">
         <div className="wrap">
           <div className="sec-head reveal-on-scroll">
-            <p className="eyebrow forest">Methodology</p>
-            <h2 className="h2" style={{ color: 'var(--forest-deep)' }}>
-              Our Structured Approach
-            </h2>
-            <p className="lead" style={{ marginTop: '14px', color: 'var(--text-muted)' }}>
+            <h2 className="sec-heading">Methodology</h2>
+            <p className="sec-subheading">Our Structured Diagnostic Approach.</p>
+            <p className="sec-body">
               A disciplined four-phase sequence designed to resolve financial blind spots without interrupting daily operations.
             </p>
           </div>
@@ -563,15 +653,13 @@ export const HomePage: React.FC = () => {
       <section className="sec-contact-cta">
         <div className="contact-cta-bg" aria-hidden="true" />
         <div className="wrap reveal-on-scroll">
-          <p className="eyebrow on-dark" style={{ marginBottom: '14px' }}>
-            Initiate Governance
-          </p>
-          <h2 className="h2">
-            Let's Build a Stronger Foundation for Your Business.
-          </h2>
-          <p className="lead on-dark" style={{ maxWidth: '640px', marginTop: '16px' }}>
-            Connect directly with an operating partner for an introductory conversation on your internal controls, Corporate Tax positioning, or bank facility readiness.
-          </p>
+          <div className="sec-head" style={{ marginBottom: '32px' }}>
+            <h2 className="sec-heading on-dark">Initiate Governance</h2>
+            <p className="sec-subheading on-dark">Let's Build a Stronger Foundation for Your Business.</p>
+            <p className="sec-body on-dark">
+              Connect directly with an operating partner for an introductory conversation on your internal controls, Corporate Tax positioning, or bank facility readiness.
+            </p>
+          </div>
           <div className="btns" style={{ justifyContent: 'center', marginTop: '36px' }}>
             <Link className="btn btn-gold" to="/contact">
               Schedule a Consultation
