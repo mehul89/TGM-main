@@ -140,7 +140,6 @@ export const AboutPage: React.FC = () => {
               <div className="stat-cols">
                 <div className="stat-col">
                   <b>All UAE Freezones &amp; Mainland</b>
-                  <span>DIFC · ADGM · DMCC · JAFZA · Mainland</span>
                 </div>
                 <div className="stat-col">
                   <b>East &amp; Southern African Continent</b>

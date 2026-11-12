@@ -156,7 +156,7 @@ export const ServicePage: React.FC = () => {
                   margin: '0 0 16px',
                   fontSize: '17px',
                   lineHeight: '28px',
-                  color: 'rgba(255, 242, 223, 0.9)',
+                  color: 'var(--text-dark)',
                 }}
               >
                 In-country Group Finance Controller and Finance Manager leadership across Tanzania, Zambia, and Mozambique; regional cross-border treasury across Kenya, Uganda, and South Africa. We work across all Freezones and Mainland corporate hubs in the UAE, advising heavy industrial, trading, manufacturing, and logistics groups.

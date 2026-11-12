@@ -410,7 +410,7 @@ export const HomePage: React.FC = () => {
         <div className="wrap">
           <div className="sec-head reveal-on-scroll">
             <h2 className="sec-heading">Brand Philosophy</h2>
-            <p className="sec-subheading">More Than Compliance. A Commitment to Better Governance.</p>
+            <p className="sec-subheading text-forest">More Than Compliance. A Commitment to Better Governance.</p>
             <p className="sec-body">
               We believe that enterprise resilience stems from institutional clarity. Our core ethos is anchored in three non-negotiable principles:
             </p>
@@ -461,14 +461,14 @@ export const HomePage: React.FC = () => {
             <div className="reveal-on-scroll">
               <div className="sec-head left-aligned" style={{ marginBottom: '28px' }}>
                 <h2 className="sec-heading">About TGM</h2>
-                <p className="sec-subheading">A New Perspective on Corporate Excellence.</p>
+                <p className="sec-subheading text-forest">A New Perspective on Corporate Excellence.</p>
                 <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)', marginBottom: '14px' }}>
                   Headquartered in Dubai and actively advising across key commercial and industrial corridors in the East and Southern African continent, TGM Accounting &amp; Auditing bridges the critical divide between standard compliance bookkeeping and senior executive leadership.
                 </p>
                 <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)', marginBottom: '14px' }}>
                   We work across all Freezones (including DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, Meydan) and Mainland corporate hubs in the UAE, while managing extensive cross-border finance, group consolidation, and trade compliance across Tanzania, Zambia, Mozambique, Kenya, and South Africa.
                 </p>
-                <p className="sec-body left-aligned" style={{ color: 'var(--text-muted)' }}>
+                <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)' }}>
                   Founded by seasoned Chartered Accountants and corporate bankers with over 18 years inside multi-jurisdictional trading, manufacturing, contracting, and logistics groups, we don't advise from afar. We have closed books, led in-country finance teams, faced revenue authorities, and structured multi-million dirham corporate credit lines from inside operating entities.
                 </p>
               </div>
@@ -489,12 +489,12 @@ export const HomePage: React.FC = () => {
                   <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>Years Operating Experience</span>
                 </div>
                 <div>
-                  <span className="mono" style={{ fontSize: '18px', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>All Freezones</span>
-                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>&amp; UAE Mainland Hubs</span>
+                  <span className="mono" style={{ fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>Freezone &amp; Mainland</span>
+                  <span style={{ display: 'block', fontSize: '12px', lineHeight: 1.45, color: 'var(--text-muted)', marginTop: '4px' }}>All UAE Zones</span>
                 </div>
                 <div>
-                  <span className="mono" style={{ fontSize: '18px', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>East &amp; Southern</span>
-                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>African Continent Footprint</span>
+                  <span className="mono" style={{ fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>East &amp; Southern</span>
+                  <span style={{ display: 'block', fontSize: '12px', lineHeight: 1.45, color: 'var(--text-muted)', marginTop: '4px' }}>African Continent Footprint</span>
                 </div>
               </div>
 
@@ -529,7 +529,6 @@ export const HomePage: React.FC = () => {
                   <div className="stat-cols">
                     <div className="stat-col">
                       <b>All UAE Freezones &amp; Mainland</b>
-                      <span>DIFC · ADGM · DMCC · JAFZA · Mainland</span>
                     </div>
                     <div className="stat-col">
                       <b>East &amp; Southern Africa</b>
@@ -623,7 +622,7 @@ export const HomePage: React.FC = () => {
         <div className="wrap">
           <div className="sec-head reveal-on-scroll">
             <h2 className="sec-heading">Methodology</h2>
-            <p className="sec-subheading">Our Structured Diagnostic Approach.</p>
+            <p className="sec-subheading text-forest">Our Structured Diagnostic Approach.</p>
             <p className="sec-body">
               A disciplined four-phase sequence designed to resolve financial blind spots without interrupting daily operations.
             </p>
