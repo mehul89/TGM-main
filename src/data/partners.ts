@@ -38,19 +38,19 @@ export const PARTNERS: PartnerProfile[] = [
       ["150+ → <120 days", "to collect from customers, UAE fit-out group"],
       ["80% input VAT recovered", "on a capital project, working directly with the Mozambique tax authority"],
       ["5 countries", "finance teams led at once, East Africa"],
-      ["Clean compliance", "VAT, payroll taxes and social security — no adverse findings across Big 4 audits, Tanzania"],
+      ["Clean compliance", "VAT, payroll taxes and social security, with no adverse findings across Big 4 audits, Tanzania"],
       ["Group ERP rollout", "finance, projects and inventory in one system, reconciliations automated across entities, UAE"],
       ["3–4 days saved", "per cross-border delivery through an agent network and digital proof of delivery, East Africa"],
       ["Lower funding cost", "capital project borrowing moved from local currency to USD, Mozambique"],
     ],
     timeline: [
       ["2026 – now", "Founder, TGM Accounting & Auditing LLC, Dubai"],
-      ["2025 – 2026", "Group Finance Manager, Joga Ram Group, Dubai — building materials, joinery, fit-out"],
-      ["2021 – 2025", "CFO, Eaglite General Trading, Dubai — fractional, then full-time; three-country trading group"],
-      ["2022", "Fractional CFO, Lake Trans Logistics — five East African countries"],
-      ["2016 – 2020", "Finance Manager, Sharaf Group — Tanzania and Mozambique"],
-      ["2012 – 2015", "Finance Controller, Export Trading Group — Tanzania"],
-      ["2009 – 2012", "Finance Controller, Acer Petroleum — Tanzania · Finance Manager, Karnavati University — India"],
+      ["2025 – 2026", "Group Finance Manager, Joga Ram Group, Dubai, covering building materials, joinery and fit-out"],
+      ["2021 – 2025", "CFO, Eaglite General Trading, Dubai, first fractional then full-time; three-country trading group"],
+      ["2022", "Fractional CFO, Lake Trans Logistics, operating across five East African countries"],
+      ["2016 – 2020", "Finance Manager, Sharaf Group, Tanzania and Mozambique"],
+      ["2012 – 2015", "Finance Controller, Export Trading Group, Tanzania"],
+      ["2009 – 2012", "Finance Controller, Acer Petroleum, Tanzania · Finance Manager, Karnavati University, India"],
     ],
   },
   {
@@ -62,10 +62,10 @@ export const PARTNERS: PartnerProfile[] = [
     name: "Anil Chowhan",
     role: "Partner · Banking & capital readiness",
     partnerIntro:
-      "19 years in banking at ICICI Bank, RAKBANK and Commercial Bank of Dubai, where he managed 300 SME accounts. He reads your business the way a credit officer will — before the credit officer does.",
+      "19 years in banking at ICICI Bank, RAKBANK and Commercial Bank of Dubai, where he managed 300 SME accounts. He reads your business the way a credit officer would, before the officer reviews it.",
     introHtml: `
-      <p style="font-size:17px;line-height:28px;margin:0 0 14px">Anil has spent his career on both sides of the lending table — as a relationship and credit officer at ICICI Bank, RAKBANK and Commercial Bank of Dubai, and later leading SME and commercial-mortgage business through broker networks.</p>
-      <p style="font-size:17px;line-height:28px;margin:0">He reads a business the way a lender does — financial statements, bank statements, turnover and cash flow — so you go to the bank with a file that is ready for credit.</p>
+      <p style="font-size:17px;line-height:28px;margin:0 0 14px">Anil has spent his career on both sides of the lending table, as a relationship and credit officer at ICICI Bank, RAKBANK and Commercial Bank of Dubai, and later leading SME and commercial-mortgage business through broker networks.</p>
+      <p style="font-size:17px;line-height:28px;margin:0">He reads a business the way a lender does, reviewing financial statements, bank statements, turnover and cash flow, so you go to the bank with a file that is ready for credit.</p>
     `,
     creds: "MBA (Finance & Marketing), Osmania University<br>PG Diploma, Banking Operations, NIIT IFBI<br>B.Com",
     langs: "English, Hindi · Taqdeer Award 2016, Commercial Bank of Dubai",

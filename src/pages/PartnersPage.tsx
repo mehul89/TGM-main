@@ -15,7 +15,7 @@ export const PartnersPage: React.FC = () => {
           <p className="crumbs">
             <Link to="/">Home</Link> / Partners
           </p>
-          <p className="eyebrow forest">Leadership &amp; Practice Heads</p>
+          <p className="eyebrow on-dark">Leadership &amp; Practice Heads</p>
           <h1
             className="h1"
             style={{ fontSize: 'clamp(36px, 5.5vw, 64px)', maxWidth: '860px' }}

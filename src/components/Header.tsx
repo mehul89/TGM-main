@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
     <>
       <header className={`site-head ${scrolled ? 'scrolled' : ''}`}>
         <div className="wrap">
-          <Link to="/" aria-label="TGM Accounting & Auditing — home">
+          <Link to="/" aria-label="TGM Accounting & Auditing home">
             <TgmLogo variant="nav" onDark={true} />
           </Link>
 

@@ -1,5 +1,5 @@
 /* =========================================================================
-   TGM Accounting & Auditing — Premium Dubai Corporate Website
+   TGM Accounting & Auditing, Premium Dubai Corporate Website
    Transparency | Governance | Materiality
    ========================================================================= */
 
@@ -74,6 +74,125 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.tgm-custom-cursor-enabled,
+  html.tgm-custom-cursor-enabled body,
+  html.tgm-custom-cursor-enabled body * {
+    cursor: none !important;
+  }
+
+  html.tgm-custom-cursor-enabled input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  html.tgm-custom-cursor-enabled textarea,
+  html.tgm-custom-cursor-enabled [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+.tgm-custom-cursor {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+  contain: strict;
+}
+
+html.tgm-custom-cursor-enabled .tgm-custom-cursor {
+  display: block;
+}
+
+.tgm-custom-cursor.is-visible {
+  opacity: 1;
+}
+
+.tgm-custom-cursor.is-text-entry {
+  opacity: 0;
+}
+
+.tgm-custom-cursor-ring,
+.tgm-custom-cursor-dot,
+.tgm-custom-cursor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.tgm-custom-cursor-ring {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(255, 242, 223, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(16, 59, 44, 0.74), 0 0 12px rgba(218, 184, 117, 0.16);
+  transition: width 220ms ease, height 220ms ease, border-color 220ms ease, background-color 220ms ease, scale 180ms ease;
+  will-change: transform;
+}
+
+.tgm-custom-cursor-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #DAB875;
+  box-shadow: 0 0 0 1px rgba(16, 59, 44, 0.6), 0 0 9px rgba(218, 184, 117, 0.55);
+  will-change: transform;
+}
+
+.tgm-custom-cursor-label {
+  display: none;
+  color: var(--ivory);
+  font: 700 7px/1 var(--font-sans);
+  letter-spacing: 1.1px;
+  text-shadow: 0 1px 3px rgba(7, 21, 15, 0.9);
+}
+
+.tgm-custom-cursor[data-mode="hover"] .tgm-custom-cursor-ring {
+  width: 38px;
+  height: 38px;
+  border-color: #DAB875;
+  background: rgba(218, 184, 117, 0.1);
+}
+
+.tgm-custom-cursor[data-mode="view"] .tgm-custom-cursor-ring,
+.tgm-custom-cursor[data-mode="explore"] .tgm-custom-cursor-ring {
+  width: 54px;
+  height: 54px;
+  border-color: #DAB875;
+  background: rgba(16, 59, 44, 0.52);
+}
+
+.tgm-custom-cursor[data-mode="drag"] .tgm-custom-cursor-ring,
+.tgm-custom-cursor[data-mode="grabbing"] .tgm-custom-cursor-ring {
+  width: 42px;
+  height: 42px;
+  border-color: #DAB875;
+  background: rgba(23, 74, 54, 0.24);
+}
+
+.tgm-custom-cursor[data-mode="grabbing"] .tgm-custom-cursor-ring {
+  width: 56px;
+  height: 56px;
+  background: rgba(218, 184, 117, 0.2);
+}
+
+.tgm-custom-cursor[data-mode="view"] .tgm-custom-cursor-label,
+.tgm-custom-cursor[data-mode="explore"] .tgm-custom-cursor-label,
+.tgm-custom-cursor[data-mode="drag"] .tgm-custom-cursor-label,
+.tgm-custom-cursor[data-mode="grabbing"] .tgm-custom-cursor-label {
+  display: block;
+}
+
+.tgm-custom-cursor.is-pressed .tgm-custom-cursor-ring {
+  scale: 0.88;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .tgm-custom-cursor {
+    display: none !important;
+  }
 }
 
 img {
@@ -1603,6 +1722,16 @@ h1, h2, h3, h4 {
   letter-spacing: 0.04em;
 }
 
+.foot-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.foot-legal-links a {
+  font-size: 12px;
+}
+
 /* ==================== INNER PAGES & UTILITIES ==================== */
 .page-hero {
   position: relative;
@@ -1653,6 +1782,79 @@ h1, h2, h3, h4 {
 
 .sec-cream {
   background-color: var(--cream);
+}
+
+.legal-page .legal-updated {
+  margin: 18px 0 0;
+  color: rgba(255, 242, 223, 0.68);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.legal-content .wrap {
+  max-width: 960px;
+}
+
+.legal-document {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  box-shadow: 0 14px 36px rgba(7, 21, 15, 0.06);
+}
+
+.legal-section + .legal-section {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border-light);
+}
+
+.legal-section h2 {
+  margin: 0 0 12px;
+  color: var(--forest-deep);
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.legal-section p,
+.legal-section li {
+  color: var(--text-body);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.legal-section p {
+  margin: 0;
+}
+
+.legal-section p + p {
+  margin-top: 12px;
+}
+
+.legal-section ul {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding-left: 22px;
+}
+
+.legal-section address {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.7;
+}
+
+.legal-section a {
+  color: var(--forest);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .sec-ivory {
@@ -3013,18 +3215,14 @@ a.card {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
 }
 
-.about-v-num {
-  font-family: var(--font-display);
-  font-size: 44px;
-  line-height: 1;
-  color: var(--gold-primary);
-  font-weight: 600;
+.about-v-card .pillar-badge {
+  margin-bottom: 14px;
 }
 
 .about-v-card h3 {
   font-size: 30px;
   color: var(--forest-deep);
-  margin-top: 14px;
+  margin-top: 0;
   font-family: var(--font-display);
 }
 
@@ -3293,6 +3491,7 @@ a.card {
   overflow: hidden;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
   position: relative;
+  height: 480px;
   width: 100%;
   min-height: 480px;
   display: flex;
@@ -3304,7 +3503,7 @@ a.card {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 480px;
+  min-height: 0;
   cursor: grab;
   overflow: hidden;
   user-select: none;
@@ -3319,6 +3518,7 @@ a.card {
   width: 100% !important;
   height: 100% !important;
   display: block;
+  will-change: opacity;
 }
 
 .globe-pin-label {
@@ -3344,6 +3544,18 @@ a.card {
   margin-top: -26px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   font-family: var(--font-body);
+  animation: globe-pin-enter 420ms ease both;
+}
+
+@keyframes globe-pin-enter {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
 }
 
 .globe-pin-label:hover {
@@ -3372,6 +3584,50 @@ a.card {
   border-radius: 50%;
   background: var(--gold-light);
   box-shadow: 0 0 6px var(--gold-light);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .globe-pin-label {
+    animation: none;
+  }
+}
+
+.globe-location-controls {
+  display: none;
+}
+
+.globe-location-control {
+  border: 1px solid rgba(197, 159, 90, 0.4);
+  border-radius: 9999px;
+  padding: 6px 9px;
+  background: rgba(7, 26, 19, 0.94);
+  color: var(--ivory);
+  font: 600 10px/1.2 var(--font-sans);
+}
+
+.globe-location-control.active {
+  background: var(--gold-light);
+  border-color: var(--ivory);
+  color: var(--forest-black);
+}
+
+@media (max-width: 640px) {
+  .globe-pin-label {
+    display: none;
+  }
+
+  .globe-location-controls {
+    position: absolute;
+    z-index: 12;
+    right: 10px;
+    bottom: 48px;
+    left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    pointer-events: auto;
+  }
 }
 
 .globe-drag-hint {
@@ -3548,6 +3804,7 @@ a.card {
   background: rgba(11, 48, 36, 0.65);
   border: 1px solid rgba(197, 159, 90, 0.22);
   border-radius: 12px;
+  padding: 16px;
   transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   will-change: transform, opacity;

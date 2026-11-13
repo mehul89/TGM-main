@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
         <div className="foot-grid">
           {/* Brand Column */}
           <div>
-            <Link to="/" aria-label="TGM Accounting & Auditing — home">
+            <Link to="/" aria-label="TGM Accounting & Auditing home">
               <TgmLogo variant="footer" onDark={true} />
             </Link>
             <p className="foot-desc">
@@ -120,6 +120,10 @@ export const Footer: React.FC = () => {
           <span>
             © 2026 TGM Accounting &amp; Auditing LLC · Dubai mainland · Licence No. {SITE_CONFIG.licence}
           </span>
+          <nav className="foot-legal-links" aria-label="Legal">
+            <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
+            <Link to="/privacy-policy">Privacy Policy</Link>
+          </nav>
           <span className="regions">
             UAE · Africa · India
           </span>

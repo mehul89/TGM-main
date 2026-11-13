@@ -28,9 +28,9 @@ const PINS: LocationPin[] = [
     country: 'United Arab Emirates',
     coords: { x: 475, y: 160 },
     role: 'Corporate Headquarters & Freezone Substance',
-    authority: 'Federal Tax Authority (FTA) · DIFC · ADGM',
+    authority: 'Federal Tax Authority (FTA)',
     desc: 'Fractional CFO, 9% Corporate Tax advisory, Qualifying Free Zone Person (QFZP) compliance, and banking dossiers across all UAE corporate registries.',
-    stat: '15+ Freezones & Mainland Hubs',
+    stat: '40+ Freezones & Mainland Hubs',
   },
   {
     id: 'tanzania',
@@ -86,7 +86,7 @@ const REGION_TABS: { key: RegionKey; label: string }[] = [
 ];
 
 const STATS = [
-  { value: '15+', label: 'UAE Freezones & Mainland Hubs', sub: 'DIFC, ADGM, DMCC & mainland registries' },
+  { value: '40+', label: 'UAE Freezones & Mainland Hubs', sub: 'Freezones and mainland registries across the UAE' },
   { value: '5+', label: 'Sovereign African Tax Jurisdictions', sub: 'TRA, ZRA, AT & regional desks' },
   { value: '16+', label: 'Years Chartered Rigor', sub: 'ICAI fellowship qualification since 2008' },
   { value: '100%', label: 'In-Country Regulatory Substance', sub: 'Direct hands-on governance & compliance' },
@@ -119,6 +119,22 @@ export const CorridorMapSection: React.FC = () => {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.corridor-intel-panel',
+        { opacity: 0, y: 18 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.corridor-cockpit-grid',
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+
       gsap.fromTo(
         '.corridor-metric-card',
         {

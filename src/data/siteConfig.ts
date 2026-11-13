@@ -4,8 +4,8 @@ export const SITE_CONFIG = {
   phoneDisplay: "+971 55 331 0567",
   phoneTel: "+971553310567",
   wa: "https://wa.me/971553310567",
-  address: "Office No 5, 206–207, Second Floor, Atrium Centre, Khalid Al Waleed Street, Al Mankhool, Dubai, UAE",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Atrium+Centre+Khalid+Al+Waleed+Street+Al+Mankhool+Dubai",
+  address: "Office No 5, 206–207, Second Floor, The Atrium Centre, 124 Khalid Bin Al Waleed Road, Al Mankhool, Dubai, UAE",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=The+Atrium+Centre%2C+124+Khalid+Bin+Al+Waleed+Road%2C+Al+Mankhool%2C+Dubai",
   licence: "1432816",
   hours: "Monday – Friday, 9:00 – 18:00 (Gulf Standard Time)",
 };

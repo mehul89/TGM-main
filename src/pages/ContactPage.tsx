@@ -30,7 +30,7 @@ export const ContactPage: React.FC = () => {
           <p className="crumbs">
             <Link to="/">Home</Link> / Contact
           </p>
-          <p className="eyebrow forest">Direct Consultation</p>
+          <p className="eyebrow on-dark">Direct Consultation</p>
           <h1
             className="h1"
             style={{ fontSize: 'clamp(36px, 5.5vw, 64px)', maxWidth: '860px' }}
@@ -38,7 +38,7 @@ export const ContactPage: React.FC = () => {
             Start with a 20-minute conversation.
           </h1>
           <p className="lead">
-            Tell us which numbers you rely on and where an error would hurt. If a Finance Health Check makes sense, we'll say so — and if it doesn't, we'll say that too.
+            Tell us which numbers you rely on and where an error would hurt. If a Finance Health Check makes sense, we'll say so, and if it doesn't, we'll say that too.
           </p>
         </div>
       </section>
@@ -147,7 +147,7 @@ export const ContactPage: React.FC = () => {
               <li>Approximate annual turnover and number of operating entities</li>
               <li>The accounting software you use (e.g., ERPNext, Tally, Zoho, Sage)</li>
               <li>
-                What prompted you to get in touch — a lender request, a tax deadline, or a cash pinch
+                What prompted you to get in touch: a lender request, a tax deadline, or a cash pinch
               </li>
             </ul>
 

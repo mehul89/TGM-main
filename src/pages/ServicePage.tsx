@@ -30,7 +30,7 @@ export const ServicePage: React.FC = () => {
           <p className="crumbs">
             <Link to="/">Home</Link> / <Link to="/#services">Services</Link> / {service.short}
           </p>
-          <p className="eyebrow forest">{service.eyebrow}</p>
+          <p className="eyebrow on-dark">{service.eyebrow}</p>
           <h1
             className="h1"
             style={{ fontSize: 'clamp(36px, 5.5vw, 64px)', maxWidth: '860px' }}
@@ -164,37 +164,19 @@ export const ServicePage: React.FC = () => {
               <div className="facts">
                 <div>
                   <p className="eyebrow on-dark">Tanzania</p>
-                  <p>TRA · Swahili &amp; English</p>
+                  <p style={{ color: 'var(--gold-primary)' }}>TRA · Swahili &amp; English</p>
                 </div>
                 <div>
                   <p className="eyebrow on-dark">Zambia</p>
-                  <p>ZRA · English</p>
+                  <p style={{ color: 'var(--gold-primary)' }} >ZRA · English</p>
                 </div>
                 <div>
                   <p className="eyebrow on-dark">Mozambique</p>
-                  <p>AT · Portuguese</p>
+                  <p style={{ color: 'var(--gold-primary)' }}>AT · Portuguese</p>
                 </div>
               </div>
             </div>
             <div>
-              <div
-                style={{
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  border: '1px solid var(--border-gold)',
-                  marginBottom: '20px',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.35)',
-                }}
-              >
-                <img
-                  src="/assets/img/uae-africa-industrial-corridor.jpg"
-                  alt="UAE Freezones &amp; Mainland connected to East and Southern African industrial operations"
-                  width={800}
-                  height={533}
-                  loading="lazy"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-              </div>
               <CorridorMap />
             </div>
           </div>

@@ -3,105 +3,11 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CorridorMapSection } from '../components/CorridorMapSection';
+import { PillarIconG, PillarIconM, PillarIconT } from '../components/PillarIcons';
 import { SERVICES } from '../data/services';
 import { SITE_CONFIG } from '../data/siteConfig';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const PillarIconT: React.FC = () => (
-  <svg
-    viewBox="0 0 80 80"
-    width="52"
-    height="52"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="pillar-svg"
-    aria-hidden="true"
-  >
-    {/* TGM Classic Serif T */}
-    <path
-      d="M16 20h48v7.5h-7.5c-2.4 0-3.6-1.2-4.2-3.4h-10v35.5c0 3 1.2 4.2 4.2 4.5V66H33.5v-2.2c3-0.3 4.2-1.5 4.2-4.5V24.1H27.7c-0.6 2.2-1.8 3.4-4.2 3.4H16V20z"
-      fill="#FFF2DF"
-    />
-  </svg>
-);
-
-const PillarIconG: React.FC = () => (
-  <svg
-    viewBox="0 0 80 80"
-    width="52"
-    height="52"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="pillar-svg"
-    aria-hidden="true"
-  >
-    {/* Central Globe Counter Motif matching TGM Logo */}
-    <g transform="translate(36, 42)">
-      <circle cx="0" cy="0" r="15" fill="none" stroke="#C59F5A" strokeWidth="1.6" />
-      <line x1="-15" y1="0" x2="15" y2="0" stroke="#C59F5A" strokeWidth="1.2" opacity="0.8" />
-      <path d="M-13 -7 Q0 -4.5 13 -7" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.65" />
-      <path d="M-13 7 Q0 4.5 13 7" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.65" />
-      <line x1="0" y1="-15" x2="0" y2="15" stroke="#C59F5A" strokeWidth="1.2" opacity="0.8" />
-      <ellipse cx="0" cy="0" rx="8" ry="15" stroke="#C59F5A" strokeWidth="1" fill="none" opacity="0.75" />
-      <path
-        d="M-4 -8 C-2 -6, 2 -5, 3 -2 C4 2, 2 6, 0 8.5 C-3 6, -5 2, -4 -3 Z"
-        fill="#DFBA79"
-        opacity="0.4"
-      />
-    </g>
-
-    {/* TGM Serif Capital G outer bowl */}
-    <path
-      d="M62 25.5c-3.2-6.5-9.2-10.5-19-10.5-15 0-26 11-26 25s11 25 26.5 25c12.5 0 20.8-6.5 22.5-18H44v-6.5h29v1.2c0 8.5-3.5 16-9.5 20.8-6 4.8-14.2 7.5-23.5 7.5C18.5 70 6 56.5 6 40S18.5 10 38 10c11.5 0 20.5 5 26.5 13l-2.5 2.5z"
-      fill="#FFF2DF"
-    />
-  </svg>
-);
-
-const PillarIconM: React.FC = () => (
-  <svg
-    viewBox="0 0 80 80"
-    width="52"
-    height="52"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="pillar-svg"
-    aria-hidden="true"
-  >
-    {/* Left vertical stem with classic serifs */}
-    <path
-      d="M13 63h11v-2.2c-2.6-0.3-3.8-1.5-3.8-4V25c0-2.5 1.2-3.7 3.8-4V18.8H10.5V21c2.6 0.3 3.8 1.5 3.8 4v31.8c0 2.5-1.2 3.7-3.8 4V63h2.5z"
-      fill="#FFF2DF"
-    />
-    {/* Left diagonal */}
-    <path d="M21 24.5 L36 56 H39.5 L27 21 H22.5 Z" fill="#FFF2DF" />
-
-    {/* 3 Ascending Bar Chart Pillars inside M (Financial Metrics) */}
-    <rect x="40.5" y="44" width="3.4" height="13" rx="0.8" fill="#C59F5A" />
-    <rect x="46" y="37" width="3.4" height="20" rx="0.8" fill="#C59F5A" />
-    <rect x="51.5" y="30" width="3.4" height="27" rx="0.8" fill="#DFBA79" />
-
-    {/* Upward Trend Arc Swooping Up to Arrowhead ↗ from TGM Logo */}
-    <path
-      d="M31.5 56.5 C40 45, 51 29, 66.5 15.5"
-      stroke="#DFBA79"
-      strokeWidth="3.6"
-      strokeLinecap="round"
-      fill="none"
-    />
-    <path
-      d="M55.5 13.5 L69 13 L67 26.5 L62.5 21 L55.5 13.5 Z"
-      fill="#DFBA79"
-    />
-
-    {/* Right vertical stem with classic serifs */}
-    <path
-      d="M63 63h11v-2.2c-2.6-0.3-3.8-1.5-3.8-4V32.5c0-2.5 1.2-3.7 3.8-4V26.3H60.5v2.2c2.6 0.3 3.8 1.5 3.8 4v24.5c0 2.5-1.2 3.7-3.8 4V63h2.5z"
-      fill="#FFF2DF"
-    />
-  </svg>
-);
 
 const PHILOSOPHY_PILLARS = [
   {
@@ -157,11 +63,11 @@ const APPROACH_STEPS = [
 const DUBAI_ADVANTAGES = [
   {
     title: 'All UAE Freezones & Mainland Hubs',
-    desc: 'Full-spectrum corporate tax, Qualifying Free Zone Person (QFZP) substance, and statutory audit readiness across DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, and Mainland corporate registries.',
+    desc: 'Full-spectrum corporate tax, Qualifying Free Zone Person (QFZP) substance, and statutory audit readiness across all UAE freezone and mainland corporate registries.',
   },
   {
     title: 'East & Southern African Continent',
-    desc: 'On-the-ground operational finance and tax leadership across Tanzania, Zambia, Mozambique, Kenya, Uganda, and South Africa — managing in-country VAT, cross-border customs, and multi-currency treasury.',
+    desc: 'On-the-ground operational finance and tax leadership across Tanzania, Zambia, Mozambique, Kenya, Uganda, and South Africa, managing in-country VAT, cross-border customs, and multi-currency treasury.',
   },
   {
     title: 'Industrial & Trade Supply Chains',
@@ -466,7 +372,7 @@ export const HomePage: React.FC = () => {
                   Headquartered in Dubai and actively advising across key commercial and industrial corridors in the East and Southern African continent, TGM Accounting &amp; Auditing bridges the critical divide between standard compliance bookkeeping and senior executive leadership.
                 </p>
                 <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)', marginBottom: '14px' }}>
-                  We work across all Freezones (including DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, Meydan) and Mainland corporate hubs in the UAE, while managing extensive cross-border finance, group consolidation, and trade compliance across Tanzania, Zambia, Mozambique, Kenya, and South Africa.
+                  We work across all UAE freezones and mainland corporate hubs, while managing extensive cross-border finance, group consolidation, and trade compliance across Tanzania, Zambia, Mozambique, Kenya, and South Africa.
                 </p>
                 <p className="sec-body left-aligned" style={{ color: 'var(--text-dark)' }}>
                   Founded by seasoned Chartered Accountants and corporate bankers with over 18 years inside multi-jurisdictional trading, manufacturing, contracting, and logistics groups, we don't advise from afar. We have closed books, led in-country finance teams, faced revenue authorities, and structured multi-million dirham corporate credit lines from inside operating entities.
@@ -489,12 +395,12 @@ export const HomePage: React.FC = () => {
                   <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>Years Operating Experience</span>
                 </div>
                 <div>
-                  <span className="mono" style={{ fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>Freezone &amp; Mainland</span>
-                  <span style={{ display: 'block', fontSize: '12px', lineHeight: 1.45, color: 'var(--text-muted)', marginTop: '4px' }}>All UAE Zones</span>
+                  <span className="mono" style={{ fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>All UAE Freezones &amp; Mainland</span>
+                  <span style={{ display: 'block', fontSize: '11px', lineHeight: 1.45, color: 'var(--text-muted)', marginTop: '4px' }}>DUBAI · RAK · SHJ · AJM · UAQ</span>
                 </div>
                 <div>
                   <span className="mono" style={{ fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--forest)', fontWeight: 700, lineHeight: 1.2, display: 'block', minHeight: '32px', paddingTop: '4px' }}>East &amp; Southern</span>
-                  <span style={{ display: 'block', fontSize: '12px', lineHeight: 1.45, color: 'var(--text-muted)', marginTop: '4px' }}>African Continent Footprint</span>
+                  <span style={{ display: 'block', fontSize: '11px', lineHeight: 1.45, color: 'var(--forest)', marginTop: '4px', letterSpacing: '0.04em' }}>Tanzania · Zambia · Mozambique · Kenya · South Africa</span>
                 </div>
               </div>
 
@@ -529,10 +435,11 @@ export const HomePage: React.FC = () => {
                   <div className="stat-cols">
                     <div className="stat-col">
                       <b>All UAE Freezones &amp; Mainland</b>
+                      <span>DUBAI · RAK · SHJ · AJM · UAQ</span>
                     </div>
                     <div className="stat-col">
                       <b>East &amp; Southern Africa</b>
-                      <span>Tanzania · Zambia · Mozambique · S. Africa</span>
+                      <span>Tanzania · Zambia · Mozambique · Kenya · South Africa</span>
                     </div>
                   </div>
                   <div className="corridor-chips">

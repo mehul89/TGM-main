@@ -1,4 +1,4 @@
-# TGM Accounting & Auditing — React Web Application
+# TGM Accounting & Auditing | React Web Application
 
 Rewritten as a modern React application with TypeScript and Vite, preserving the complete design system, typography, animated skyline, interactive corridor map, partner profiles, and 8 dedicated service lines for TGM Accounting & Auditing LLC.
 

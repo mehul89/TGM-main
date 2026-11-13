@@ -26,7 +26,7 @@ export const SERVICES: ServiceItem[] = [
     title: "Accounting & bookkeeping in Dubai",
     eyebrow: "Accounting & bookkeeping",
     h1: "Books your bank, buyer and the FTA can rely on.",
-    lead: "Monthly bookkeeping, month-end close and IFRS financial statements for owner-run businesses — closed on a fixed calendar, reconciled every month, ready for your auditor.",
+    lead: "Monthly bookkeeping, month-end close and IFRS financial statements for owner-run businesses. Books are closed on a fixed calendar, reconciled every month and ready for your auditor.",
     meta: "Accounting and bookkeeping services in Dubai: monthly bookkeeping, backlog clean-up, month-end close, MIS, IFRS statements, group consolidation and payroll.",
     tiles: [
       "Monthly bookkeeping",
@@ -45,7 +45,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Month-end close & MIS",
-        "A fixed close calendar and a management pack — P&L, balance sheet, cash and KPIs — on the same working day every month.",
+        "A fixed close calendar and a management pack with P&L, balance sheet, cash and KPIs, delivered on the same working day every month.",
       ],
       [
         "IFRS financial statements",
@@ -82,7 +82,7 @@ export const SERVICES: ServiceItem[] = [
     title: "VAT, Corporate Tax & tax reclaim in the UAE",
     eyebrow: "UAE tax",
     h1: "Compliant before the FTA asks. Every recoverable dirham recovered.",
-    lead: "VAT, Corporate Tax and Excise compliance, prepared and reviewed by a Chartered Accountant — plus refund claims for the input VAT most businesses leave on the table.",
+    lead: "VAT, Corporate Tax and Excise compliance, prepared and reviewed by a Chartered Accountant, plus refund claims for the input VAT most businesses leave on the table.",
     meta: "UAE VAT and Corporate Tax services in Dubai: registration, returns, pre-filing review, voluntary disclosures, Small Business Relief, Free Zone assessments and VAT refunds.",
     tiles: [
       "VAT registration & returns",
@@ -113,7 +113,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Small Business Relief & Free Zone reviews",
-        "Whether you qualify for Small Business Relief or Qualifying Free Zone Person treatment — and what it takes to keep it.",
+        "Whether you qualify for Small Business Relief or Qualifying Free Zone Person treatment, and what it takes to keep it.",
       ],
       [
         "Transfer pricing readiness",
@@ -139,7 +139,7 @@ export const SERVICES: ServiceItem[] = [
     slug: "finance-health-check",
     tile: "gold",
     short: "Finance health check",
-    title: "Finance Health Check — independent review of your books",
+    title: "Finance Health Check: independent review of your books",
     eyebrow: "Finance health check · start here",
     h1: "Are your numbers true?",
     lead: "An independent, read-only review of your books, controls, receivables, stock and tax. Every finding rated and valued in dirhams, with a 90-day action list. Then you decide.",
@@ -157,7 +157,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Controls",
-        "Who can raise, approve and pay — and where one person can do all three.",
+        "Who can raise, approve and pay, and where one person can do all three.",
       ],
       [
         "Receivables & stock",
@@ -190,7 +190,7 @@ export const SERVICES: ServiceItem[] = [
     title: "Fractional CFO services in Dubai",
     eyebrow: "Fractional CFO",
     h1: "You have an accountant. You don't have a CFO.",
-    lead: "Senior finance leadership for owner-run businesses, a few days a month — monthly owner reviews, budgets, bank reporting and a finance team that runs properly, without a full-time CFO salary.",
+    lead: "Senior finance leadership for owner-run businesses, delivered a few days each month. Includes owner reviews, budgets, bank reporting and finance team oversight without a full-time CFO salary.",
     meta: "Fractional and virtual CFO services in Dubai and the UAE: monthly owner review, budgets and forecasts, pricing and margin models, bank reporting and finance team leadership.",
     tiles: [
       "Monthly owner review",
@@ -201,7 +201,7 @@ export const SERVICES: ServiceItem[] = [
     subs: [
       [
         "Monthly owner review",
-        "One structured 45-minute meeting a month on cash, margin and risk — with decisions, not just reports.",
+        "One structured 45-minute meeting a month on cash, margin and risk, focused on decisions, not just reports.",
       ],
       [
         "Budgets & rolling forecasts",
@@ -217,7 +217,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Finance team leadership",
-        "Hiring, training and process design — including remote oversight of finance teams in other countries.",
+        "Hiring, training and process design, including remote oversight of finance teams in other countries.",
       ],
       [
         "Board & investor reporting",
@@ -238,7 +238,7 @@ export const SERVICES: ServiceItem[] = [
     title: "Internal controls, risk & finance automation",
     eyebrow: "Controls & automation",
     h1: "Problems surfaced every month, not at year-end.",
-    lead: "We connect to the software you already use and build a checking layer around it — scheduled reconciliations, fraud red flags and owner dashboards. Only the exceptions reach a person.",
+    lead: "We connect to the software you already use and build a checking layer around it with scheduled reconciliations, fraud red flags and owner dashboards. Only the exceptions reach a person.",
     meta: "Internal control reviews, fraud red-flag checks, automated reconciliations, Power BI dashboards and cost control reviews for UAE businesses.",
     tiles: [
       "Internal control reviews",
@@ -261,7 +261,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Owner dashboards",
-        "Power BI dashboards on cash, margin, receivables and stock — built on your live data.",
+        "Power BI dashboards on cash, margin, receivables and stock, built on your live data.",
       ],
       [
         "Cost control reviews",
@@ -283,9 +283,9 @@ export const SERVICES: ServiceItem[] = [
     slug: "funding-restructuring-advisory",
     tile: "gold",
     short: "Funding & restructuring",
-    title: "Funding & restructuring advisory in Dubai — working capital, trade finance, refinancing & turnaround",
+    title: "Funding & restructuring advisory in Dubai: working capital, trade finance, refinancing & turnaround",
     eyebrow: "Funding & restructuring advisory",
-    h1: "The right funding to grow — and a plan when cash runs short.",
+    h1: "The right funding to grow, and a plan when cash runs short.",
     lead: "We work out how much funding your business needs and in what form, prepare a credit-ready file, and stay with you until the facility is in place. When cash is under pressure, we build the plan and the numbers your banks and creditors need to say yes. Led by a partner with 19 years on the lender's side of the table.",
     meta: "Funding and restructuring advisory in Dubai: working capital, trade finance, term and expansion loans, refinancing, investor readiness, 13-week cash plans, creditor negotiation and restructuring support for UAE SMEs.",
     tiles: [
@@ -298,7 +298,7 @@ export const SERVICES: ServiceItem[] = [
     subs: [
       [
         "Funding needs assessment",
-        "How much you need, for how long and in what form — worked out from your operating cycle and cash flow, not from what a lender happens to be selling.",
+        "How much you need, for how long and in what form, worked out from your operating cycle and cash flow rather than what a lender happens to be selling.",
       ],
       [
         "Working capital",
@@ -341,7 +341,7 @@ export const SERVICES: ServiceItem[] = [
     subs2: [
       [
         "Turnaround diagnostic",
-        "Where the money went, what is still viable and what has to stop — in two to three weeks.",
+        "A two-to-three-week review of where the money went, what is still viable and what has to stop.",
       ],
       [
         "13-week cash survival plan",
@@ -349,7 +349,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Refinancing & restructuring debt",
-        "Expensive or short-term debt reviewed and refinanced — including moving borrowing between local currency and USD.",
+        "Expensive or short-term debt reviewed and refinanced, including moving borrowing between local currency and USD.",
       ],
       [
         "Receivables recovery analysis",
@@ -375,7 +375,7 @@ export const SERVICES: ServiceItem[] = [
     ],
     process: [
       ["01", "Assess", "Business model, financials, bank statements and cash flow reviewed."],
-      ["02", "Structure", "The right facility type, size and tenor — or the right restructuring path."],
+      ["02", "Structure", "The right facility type, size and tenor, or the right restructuring path."],
       ["03", "Prepare", "Credit-ready file, model, projections or cash plan."],
       ["04", "Present", "Lender, creditor and bank meetings handled with you."],
       ["05", "Support", "Through approval, disbursement, covenants and renewals."],
@@ -415,7 +415,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Remote finance team oversight",
-        "Supervision of your finance teams in Tanzania, Zambia and Mozambique — in Swahili and Portuguese where needed.",
+        "Supervision of your finance teams in Tanzania, Zambia and Mozambique, using Swahili and Portuguese where needed.",
       ],
       [
         "Statutory audit coordination",
@@ -427,7 +427,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Currency & funding structure",
-        "Local-currency versus USD borrowing and FX exposure — including moving a capital project's borrowing to USD to cut funding cost.",
+        "Local-currency versus USD borrowing and FX exposure, including moving a capital project's borrowing to USD to cut funding cost.",
       ],
       [
         "Market-entry finance set-up",
@@ -445,10 +445,10 @@ export const SERVICES: ServiceItem[] = [
     slug: "business-setup",
     tile: "gulf",
     short: "Business setup",
-    title: "Business setup in Dubai — mainland, free zone & branch",
+    title: "Business setup in Dubai: mainland, free zone & branch",
     eyebrow: "Business setup consultancy",
-    h1: "Set up right the first time — with the tax and banking consequences already worked out.",
-    lead: "Mainland, free zone or branch: we help you choose the structure, licence and activities that fit how you will actually trade, bank and pay tax — then keep the books from day one.",
+    h1: "Set up right the first time, with the tax and banking consequences already worked out.",
+    lead: "Mainland, free zone or branch: we help you choose the structure, licence and activities that fit how you will actually trade, bank and pay tax, then keep the books from day one.",
     meta: "Business setup consultancy in Dubai: mainland and free zone company formation, branches of foreign companies, structure advice, licence renewals, bank account readiness and post-setup VAT and Corporate Tax registration.",
     tiles: [
       "Mainland & free zone setup",
@@ -459,7 +459,7 @@ export const SERVICES: ServiceItem[] = [
     subs: [
       [
         "Structure & jurisdiction advice",
-        "Mainland, free zone or branch compared on ownership, activities, visas, banking and Corporate Tax — including whether you can qualify as a Qualifying Free Zone Person.",
+        "Mainland, free zone or branch compared on ownership, activities, visas, banking and Corporate Tax, including whether you can qualify as a Qualifying Free Zone Person.",
       ],
       [
         "Mainland company formation",
@@ -467,7 +467,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Free zone company formation",
-        "The right free zone for your activity, budget and visa needs — DMCC, IFZA, Meydan, RAKEZ and others compared on cost and fit.",
+        "The right free zone for your activity, budget and visa needs, with UAE options compared on cost and fit.",
       ],
       [
         "Branches & subsidiaries of foreign companies",
@@ -483,7 +483,7 @@ export const SERVICES: ServiceItem[] = [
       ],
       [
         "Corporate bank account readiness",
-        "Your account-opening file prepared the way UAE banks assess it — by a partner with 19 years in UAE banking.",
+        "Your account-opening file prepared the way UAE banks assess it, by a partner with 19 years in UAE banking.",
       ],
       [
         "Post-setup compliance",

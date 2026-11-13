@@ -46,7 +46,7 @@ export const CONCIERGE_QUESTIONS: ConciergeQuestion[] = [
     question: "How do you assist businesses across the UAE–Africa corridor?",
     shortDesc: "Cross-border finance between UAE, Tanzania, Zambia & Mozambique.",
     category: "Cross-Border",
-    answer: "For UAE groups operating operating subsidiaries in East Africa—or African businesses establishing their regional holding company in Dubai—we manage cross-border treasury, tax residency documentation, and local compliance with the Tanzania Revenue Authority (TRA), Zambia Revenue Authority (ZRA), and Mozambique's Autoridade Tributária (AT)."
+    answer: "For UAE groups operating operating subsidiaries in East Africa, or African businesses establishing their regional holding company in Dubai, we manage cross-border treasury, tax residency documentation, and local compliance with the Tanzania Revenue Authority (TRA), Zambia Revenue Authority (ZRA), and Mozambique's Autoridade Tributária (AT)."
   },
   {
     id: "banking-readiness",
@@ -70,7 +70,7 @@ export const CONCIERGE_QUESTIONS: ConciergeQuestion[] = [
     question: "Can TGM assist with Dubai company formation and corporate banking?",
     shortDesc: "Mainland vs. Free Zone selection, licensing, and corporate bank accounts.",
     category: "Corporate Services",
-    answer: "Yes. We advise on strategic jurisdictional selection (Dubai Mainland vs. DMCC, DIFC, IFZA or DAFZA), coordinate commercial licensing, establish economic substance compliance, and facilitate corporate bank account openings with top UAE commercial banks."
+    answer: "Yes. We advise on strategic jurisdictional selection across UAE mainland and freezone options, coordinate commercial licensing, establish economic substance compliance, and facilitate corporate bank account openings with top UAE commercial banks."
   },
   {
     id: "tgm-difference",

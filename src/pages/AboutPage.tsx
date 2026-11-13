@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { PillarIconG, PillarIconM, PillarIconT } from '../components/PillarIcons';
 
 interface TimelineItem {
   year: string;
@@ -27,32 +28,32 @@ const FOUNDER_TIMELINE: TimelineItem[] = [
   {
     year: '2009',
     title: 'Finance Manager',
-    desc: 'Karnavati University, India — then Finance Controller at Acer Petroleum, Tanzania.',
+    desc: 'Karnavati University, India, then Finance Controller at Acer Petroleum, Tanzania.',
   },
   {
     year: '2012',
     title: 'Finance Controller',
-    desc: 'Export Trading Group, Tanzania — VAT, payroll taxes and social security with no adverse findings across Big 4 audits.',
+    desc: 'Export Trading Group, Tanzania, VAT, payroll taxes and social security with no adverse findings across Big 4 audits.',
   },
   {
     year: '2016',
     title: 'Finance Manager',
-    desc: 'Sharaf Group, Tanzania and Mozambique — 80% input VAT recovered on a capital project; borrowing moved to USD.',
+    desc: 'Sharaf Group, Tanzania and Mozambique, 80% input VAT recovered on a capital project; borrowing moved to USD.',
   },
   {
     year: '2021',
     title: 'CFO',
-    desc: 'Eaglite General Trading, Dubai — three-country trading group. Fractional CFO for Lake Trans Logistics across five East African countries.',
+    desc: 'Eaglite General Trading, Dubai, a three-country trading group. Fractional CFO for Lake Trans Logistics across five East African countries.',
   },
   {
     year: '2025',
     title: 'Group Finance Manager',
-    desc: 'Joga Ram Group, Dubai — building materials, joinery and fit-out; group ERP rollout and receivables cut from 150+ to under 120 days.',
+    desc: 'Joga Ram Group, Dubai, building materials, joinery and fit-out; group ERP rollout and receivables cut from 150+ to under 120 days.',
   },
   {
     year: '2026',
     title: 'Founder, TGM',
-    desc: 'Opens TGM Accounting & Auditing LLC in Dubai with Anil Chowhan, formally launched on Deepawali.',
+    desc: 'TGM Accounting & Auditing LLC launched on Deepawali 2026.',
     isNow: true,
   },
 ];
@@ -101,6 +102,38 @@ export const AboutPage: React.FC = () => {
             <blockquote className="about-quote">
               “Your system says you made a profit. Your bank may disagree.”
             </blockquote>
+            <div
+              className="about-image-frame"
+              style={{ width: '100%', aspectRatio: '16 / 9', marginTop: '32px', borderRadius: '12px', overflow: 'hidden' }}
+            >
+              <img
+                src="/assets/img/uae-africa-panoramic-skyline.jpg"
+                alt="UAE Freezones and Mainland corporate hubs connected with East and Southern African industrial operations and trade leadership"
+                width={2000}
+                height={1125}
+                loading="lazy"
+                style={{ objectPosition: 'center 35%' }}
+              />
+              <div className="about-stat-overlay">
+                <div className="stat-cols">
+                  <div className="stat-col">
+                    <b>All UAE Freezones &amp; Mainland</b>
+                    <span>Across all UAE freezones and mainland hubs</span>
+                  </div>
+                  <div className="stat-col">
+                    <b>East &amp; Southern African Continent</b>
+                    <span>Tanzania · Zambia · Mozambique · Kenya · South Africa</span>
+                  </div>
+                </div>
+                <div className="corridor-chips">
+                  <span>Industrial Logistics</span>
+                  <span aria-hidden="true">·</span>
+                  <span>Heavy Manufacturing</span>
+                  <span aria-hidden="true">·</span>
+                  <span>Trade Finance Facilities</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div>
             <p className="about-body">
@@ -116,46 +149,14 @@ export const AboutPage: React.FC = () => {
             </p>
             <p className="about-body" style={{ margin: 0 }}>
               Because so many UAE businesses trade with and operate in Africa, TGM works across all
-              UAE freezones (DIFC, ADGM, DMCC, JAFZA, DAFZA, RAKEZ, Shams, IFZA, Meydan) and Mainland
-              corporate registries, while managing cross-border financial operations throughout the
-              East and Southern African continent (Tanzania, Zambia, Mozambique, Kenya, South Africa)
-              — led by people who have closed books, faced local revenue authorities, and supervised
+              UAE freezones and mainland corporate registries, while managing cross-border financial operations throughout the
+              East and Southern African continent (Tanzania, Zambia, Mozambique, Kenya, South Africa),
+              led by people who have closed books, faced local revenue authorities, and supervised
               heavy industrial supply chains from inside operating businesses.
             </p>
           </div>
         </div>
 
-        {/* UAE–Africa Cross-Border Industrial Corridor Visual */}
-        <div className="wrap" style={{ marginTop: '48px' }}>
-          <div className="about-image-frame" style={{ maxHeight: '440px', borderRadius: '12px', overflow: 'hidden' }}>
-            <img
-              src="/assets/img/uae-africa-panoramic-skyline.jpg"
-              alt="UAE Freezones and Mainland corporate hubs connected with East and Southern African industrial operations and trade leadership"
-              width={2000}
-              height={1125}
-              loading="lazy"
-              style={{ objectPosition: 'center 35%' }}
-            />
-            <div className="about-stat-overlay">
-              <div className="stat-cols">
-                <div className="stat-col">
-                  <b>All UAE Freezones &amp; Mainland</b>
-                </div>
-                <div className="stat-col">
-                  <b>East &amp; Southern African Continent</b>
-                  <span>Tanzania · Zambia · Mozambique · S. Africa</span>
-                </div>
-              </div>
-              <div className="corridor-chips">
-                <span>Industrial Logistics</span>
-                <span aria-hidden="true">·</span>
-                <span>Heavy Manufacturing</span>
-                <span aria-hidden="true">·</span>
-                <span>Trade Finance Facilities</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* 3. THE FOUNDER'S JOURNEY SECTION */}
@@ -166,7 +167,7 @@ export const AboutPage: React.FC = () => {
             From office boy to <span className="gold-i">Group CFO.</span>
           </h2>
           <p className="lead about-journey-lead">
-            Twenty-five years, every rung of the ladder — and the reason TGM respects the basics.
+            Twenty-five years, every rung of the ladder, and the reason TGM respects the basics.
           </p>
 
           <ol className="about-tl">
@@ -200,7 +201,7 @@ export const AboutPage: React.FC = () => {
             <div className="about-mv-card">
               <p className="eyebrow forest">Our mission</p>
               <p className="stmt">
-                To give every owner-run business numbers it can trust — books that are true,
+                To give every owner-run business numbers it can trust: books that are true,
                 controls that work every month, and finance leadership that turns those numbers into
                 decisions, funding and growth.
               </p>
@@ -209,7 +210,7 @@ export const AboutPage: React.FC = () => {
               <p className="eyebrow forest">Our vision</p>
               <p className="stmt">
                 To be the most trusted finance partner for businesses building between the UAE and
-                Africa — the firm owners call first when the numbers matter.
+                Africa. The firm owners call first when the numbers matter.
               </p>
             </div>
           </div>
@@ -222,13 +223,15 @@ export const AboutPage: React.FC = () => {
           <p className="eyebrow forest">Our values</p>
           <h2 className="h2 about-values-heading">Our name is our standard.</h2>
           <p className="lead about-values-lead">
-            TGM stands for Transparency, Governance and Materiality — three words every owner,
+            TGM stands for Transparency, Governance and Materiality, three words every owner,
             banker and auditor understands, and the three tests we apply to all our work.
           </p>
 
           <div className="about-v-grid">
             <div className="about-v-card">
-              <div className="about-v-num">T</div>
+              <div className="pillar-badge" aria-hidden="true">
+                <PillarIconT />
+              </div>
               <h3>Transparency</h3>
               <p>
                 We tell you what your numbers say, including what you would rather not hear. Every
@@ -236,7 +239,9 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
             <div className="about-v-card">
-              <div className="about-v-num">G</div>
+              <div className="pillar-badge" aria-hidden="true">
+                <PillarIconG />
+              </div>
               <h3>Governance</h3>
               <p>
                 Controls, approvals and monthly checks that protect the owner's money when nobody is
@@ -244,7 +249,9 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
             <div className="about-v-card">
-              <div className="about-v-num">M</div>
+              <div className="pillar-badge" aria-hidden="true">
+                <PillarIconM />
+              </div>
               <h3>Materiality</h3>
               <p>
                 We focus on what moves your money. Small issues are noted; material issues are fixed

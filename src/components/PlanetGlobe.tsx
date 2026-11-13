@@ -29,7 +29,8 @@ const LOCATIONS: LocationCoord[] = [
 
 const GLOBE_RADIUS = 100;
 
-// Convert lat/long to 3D Cartesian coordinates
+// The canvas texture uses longitude -180..180 from left to right, matching
+// SphereGeometry's UV convention used by this coordinate mapping.
 function latLonToVector3(lat: number, lon: number, radius: number): THREE.Vector3 {
   const phi = (90 - lat) * (Math.PI / 180);
   const theta = (lon + 180) * (Math.PI / 180);
@@ -37,6 +38,41 @@ function latLonToVector3(lat: number, lon: number, radius: number): THREE.Vector
   const z = radius * Math.sin(phi) * Math.sin(theta);
   const y = radius * Math.cos(phi);
   return new THREE.Vector3(x, y, z);
+}
+
+function getRotationForLocations(locations: LocationCoord[]): { x: number; y: number } {
+  const center = locations
+    .reduce((sum, location) => sum.add(latLonToVector3(location.lat, location.lon, 1)), new THREE.Vector3())
+    .normalize();
+
+  let x = Math.atan2(center.y, center.z);
+  if (x > Math.PI / 2) x -= Math.PI;
+  else if (x < -Math.PI / 2) x += Math.PI;
+
+  const centered = center.applyAxisAngle(new THREE.Vector3(1, 0, 0), x);
+  return { x, y: Math.atan2(-centered.x, centered.z) };
+}
+
+function nearestEquivalentAngle(angle: number, reference: number): number {
+  return reference + Math.atan2(Math.sin(angle - reference), Math.cos(angle - reference));
+}
+
+function createSurfaceArc(start: THREE.Vector3, end: THREE.Vector3): THREE.Vector3[] {
+  const from = start.clone().normalize();
+  const to = end.clone().normalize();
+  const angle = from.angleTo(to);
+  const height = Math.min(10, angle * 9);
+  const points: THREE.Vector3[] = [];
+
+  for (let i = 0; i <= 48; i++) {
+    const t = i / 48;
+    const direction = from.clone().multiplyScalar(Math.sin((1 - t) * angle));
+    direction.add(to.clone().multiplyScalar(Math.sin(t * angle)));
+    direction.normalize();
+    points.push(direction.multiplyScalar(GLOBE_RADIUS + 0.6 + Math.sin(Math.PI * t) * height));
+  }
+
+  return points;
 }
 
 // Draw authentic world map texture with highlighted UAE, Africa, and India
@@ -262,53 +298,68 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const globeGroupRef = useRef<THREE.Group | null>(null);
-  const targetRotationRef = useRef<{ x: number; y: number }>({ x: 0.15, y: -0.9 });
+  const targetRotationRef = useRef(getRotationForLocations(LOCATIONS));
+  const rotationVelocityRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
-  const previousMousePositionRef = useRef({ x: 0, y: 0 });
+  const pointerIdRef = useRef<number | null>(null);
+  const previousPointerRef = useRef({ x: 0, y: 0, time: 0 });
+  const activePinIdRef = useRef(activePinId);
+  activePinIdRef.current = activePinId;
   const [pinScreenCoords, setPinScreenCoords] = useState<{ [key: string]: { x: number; y: number; visible: boolean } }>({});
 
-  // Rotation targets for each corridor view (bringing them front & center)
+  // Derive each view from the same coordinates used to place its markers.
   useEffect(() => {
     const region = hoveredRegion || activeRegion;
-    let targetY = -0.9; // Default corridor center (Middle East / Indian Ocean)
-    let targetX = 0.15;
+    const selectedLocation = hoveredRegion ? undefined : LOCATIONS.find((location) => location.id === activePinId);
+    const locations = selectedLocation && region !== 'all'
+      ? [selectedLocation]
+      : LOCATIONS.filter((location) => region === 'all' || location.region === region);
+    const rotation = getRotationForLocations(locations.length ? locations : LOCATIONS);
+    const currentY = targetRotationRef.current.y;
+    targetRotationRef.current = {
+      x: rotation.x,
+      y: nearestEquivalentAngle(rotation.y, currentY),
+    };
+    rotationVelocityRef.current = { x: 0, y: 0 };
 
-    if (region === 'uae') {
-      targetY = -0.95; // Dubai directly facing camera
-      targetX = 0.22;
-    } else if (region === 'africa') {
-      targetY = -0.65; // East & Southern Africa facing camera
-      targetX = -0.05;
-    } else if (region === 'india') {
-      targetY = -1.25; // India facing camera
-      targetX = 0.25;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && globeGroupRef.current) {
+      globeGroupRef.current.rotation.set(rotation.x, targetRotationRef.current.y, 0);
     }
-
-    targetRotationRef.current = { x: targetX, y: targetY };
-  }, [activeRegion, hoveredRegion]);
+  }, [activeRegion, activePinId, hoveredRegion]);
 
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth;
-    const height = container.clientHeight || 440;
+    let width = container.clientWidth;
+    let height = container.clientHeight || 440;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
-    camera.position.set(0, 0, 270);
+    const updateCameraDistance = () => {
+      const verticalHalfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+      const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * width / height);
+      camera.position.z = (GLOBE_RADIUS * 1.05) / Math.tan(Math.min(verticalHalfFov, horizontalHalfFov)) * 1.12;
+    };
+    updateCameraDistance();
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: window.innerWidth >= 768,
+      alpha: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2));
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.domElement.style.opacity = '0';
+    renderer.domElement.style.transition = prefersReducedMotion ? 'none' : 'opacity 700ms ease';
     container.appendChild(renderer.domElement);
 
     // 2. Globe Group Hierarchy
     const globeGroup = new THREE.Group();
-    globeGroup.rotation.x = targetRotationRef.current.x;
-    globeGroup.rotation.y = targetRotationRef.current.y;
+    globeGroup.rotation.set(targetRotationRef.current.x, targetRotationRef.current.y, 0);
+    globeGroup.scale.setScalar(prefersReducedMotion ? 1 : 0.985);
     scene.add(globeGroup);
     globeGroupRef.current = globeGroup;
 
@@ -336,42 +387,30 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
     globeGroup.add(atmosMesh);
 
     // 5. Lighting Rig
-    const ambientLight = new THREE.AmbientLight(0xfff2df, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xfff2df, 0.85);
     scene.add(ambientLight);
 
-    const sunLight = new THREE.DirectionalLight(0xfff2df, 1.8);
+    const sunLight = new THREE.DirectionalLight(0xfff2df, 1.4);
     sunLight.position.set(200, 150, 150);
     scene.add(sunLight);
 
-    const rimLight = new THREE.PointLight(0xc59f5a, 2.5, 400);
+    const rimLight = new THREE.PointLight(0xc59f5a, 1.6, 400);
     rimLight.position.set(-180, -100, -100);
     scene.add(rimLight);
 
     // 6. 3D Trade Flight Arcs (Dubai to Africa and India)
     const dubaiVec = latLonToVector3(25.2, 55.3, GLOBE_RADIUS);
-    const arcDestinations = [
-      { id: 'tanzania', lat: -6.8, lon: 39.3 },
-      { id: 'zambia', lat: -15.4, lon: 28.3 },
-      { id: 'mozambique', lat: -25.9, lon: 32.6 },
-      { id: 'india', lat: 19.1, lon: 72.9 },
-    ];
-
     const arcLines: THREE.Line[] = [];
-    arcDestinations.forEach((dest) => {
+    LOCATIONS.filter((location) => location.id !== 'dubai').forEach((dest, index) => {
       const destVec = latLonToVector3(dest.lat, dest.lon, GLOBE_RADIUS);
-      const midVec = dubaiVec.clone().lerp(destVec, 0.5);
-      const distance = dubaiVec.distanceTo(destVec);
-      midVec.normalize().multiplyScalar(GLOBE_RADIUS + distance * 0.28);
-
-      const curve = new THREE.QuadraticBezierCurve3(dubaiVec, midVec, destVec);
-      const points = curve.getPoints(40);
+      const points = createSurfaceArc(dubaiVec, destVec);
       const curveGeo = new THREE.BufferGeometry().setFromPoints(points);
+      curveGeo.setDrawRange(0, prefersReducedMotion ? points.length : 0);
 
       const curveMat = new THREE.LineDashedMaterial({
         color: 0xdfba79,
         dashSize: 4,
         gapSize: 2.5,
-        linewidth: 2,
         transparent: true,
         opacity: 0.85,
       });
@@ -380,22 +419,26 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
       line.computeLineDistances();
       globeGroup.add(line);
       arcLines.push(line);
+      line.userData.routeIndex = index;
     });
 
     // 7. Location Pins & Radar Blips
     const pinRings: THREE.Mesh[] = [];
-    LOCATIONS.forEach((loc) => {
+    const pinCores: { mesh: THREE.Mesh; material: THREE.MeshBasicMaterial }[] = [];
+    LOCATIONS.forEach((loc, index) => {
       const pos = latLonToVector3(loc.lat, loc.lon, GLOBE_RADIUS);
       const normal = pos.clone().normalize();
 
       // Glowing Node Pin
-      const pinGeo = new THREE.SphereGeometry(loc.id === 'dubai' ? 2.8 : 2.2, 16, 16);
+      const baseScale = loc.id === 'dubai' ? 2.8 : 2.2;
+      const pinGeo = new THREE.SphereGeometry(baseScale, 16, 16);
       const pinMat = new THREE.MeshBasicMaterial({
-        color: loc.id === 'dubai' ? 0xfff2df : 0xdfba79,
+        color: loc.id === activePinIdRef.current ? 0xfff2df : 0xdfba79,
       });
       const pinMesh = new THREE.Mesh(pinGeo, pinMat);
       pinMesh.position.copy(pos.clone().add(normal.clone().multiplyScalar(1.2)));
       globeGroup.add(pinMesh);
+      pinCores.push({ mesh: pinMesh, material: pinMat });
 
       // Radar Ring
       const ringGeo = new THREE.RingGeometry(1.5, 3.2, 24);
@@ -409,143 +452,222 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
       ringMesh.position.copy(pos.clone().add(normal.clone().multiplyScalar(0.4)));
       ringMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
       globeGroup.add(ringMesh);
+      ringMesh.userData.phase = index * 0.72;
       pinRings.push(ringMesh);
     });
 
-    // 8. Mouse Drag Interaction
-    const handleMouseDown = (e: MouseEvent) => {
-      isDraggingRef.current = true;
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingRef.current) return;
-      const deltaX = e.clientX - previousMousePositionRef.current.x;
-      const deltaY = e.clientY - previousMousePositionRef.current.y;
-
-      globeGroup.rotation.y += deltaX * 0.006;
-      globeGroup.rotation.x = Math.max(-0.6, Math.min(0.6, globeGroup.rotation.x + deltaY * 0.006));
-      targetRotationRef.current = { x: globeGroup.rotation.x, y: globeGroup.rotation.y };
-
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const handleMouseUp = () => {
-      isDraggingRef.current = false;
-    };
-
+    // 8. Pointer drag for both mouse and touch, with release velocity.
     const domEl = renderer.domElement;
-    domEl.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    const handlePointerDown = (e: PointerEvent) => {
+      if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      isDraggingRef.current = true;
+      pointerIdRef.current = e.pointerId;
+      previousPointerRef.current = { x: e.clientX, y: e.clientY, time: e.timeStamp };
+      rotationVelocityRef.current = { x: 0, y: 0 };
+      domEl.setPointerCapture(e.pointerId);
+    };
 
-    // Touch support for mobile
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        isDraggingRef.current = true;
-        previousMousePositionRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDraggingRef.current || e.pointerId !== pointerIdRef.current) return;
+      const previous = previousPointerRef.current;
+      const deltaX = e.clientX - previous.x;
+      const deltaY = e.clientY - previous.y;
+      const elapsed = Math.max(8, e.timeStamp - previous.time);
+      const sensitivity = Math.PI / Math.max(width, height);
+      const deltaRotationY = deltaX * sensitivity;
+      const deltaRotationX = deltaY * sensitivity;
+
+      targetRotationRef.current = {
+        x: THREE.MathUtils.clamp(targetRotationRef.current.x + deltaRotationX, -1.15, 1.15),
+        y: targetRotationRef.current.y + deltaRotationY,
+      };
+      rotationVelocityRef.current = {
+        x: THREE.MathUtils.clamp(deltaRotationX / (elapsed / 1000), -2.2, 2.2),
+        y: THREE.MathUtils.clamp(deltaRotationY / (elapsed / 1000), -2.2, 2.2),
+      };
+      previousPointerRef.current = { x: e.clientX, y: e.clientY, time: e.timeStamp };
     };
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      const deltaX = e.touches[0].clientX - previousMousePositionRef.current.x;
-      const deltaY = e.touches[0].clientY - previousMousePositionRef.current.y;
-      globeGroup.rotation.y += deltaX * 0.007;
-      globeGroup.rotation.x = Math.max(-0.6, Math.min(0.6, globeGroup.rotation.x + deltaY * 0.007));
-      targetRotationRef.current = { x: globeGroup.rotation.x, y: globeGroup.rotation.y };
-      previousMousePositionRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    };
-    const handleTouchEnd = () => {
+
+    const handlePointerUp = (e: PointerEvent) => {
+      if (e.pointerId !== pointerIdRef.current) return;
       isDraggingRef.current = false;
+      pointerIdRef.current = null;
     };
-    domEl.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd);
+
+    const handlePointerCancel = () => {
+      isDraggingRef.current = false;
+      pointerIdRef.current = null;
+    };
+    domEl.addEventListener('pointerdown', handlePointerDown);
+    domEl.addEventListener('pointermove', handlePointerMove);
+    domEl.addEventListener('pointerup', handlePointerUp);
+    domEl.addEventListener('pointercancel', handlePointerCancel);
 
     // 9. Resize Handler
     const handleResize = () => {
-      if (!container) return;
-      const newW = container.clientWidth;
-      const newH = container.clientHeight || 440;
-      camera.aspect = newW / newH;
+      width = container.clientWidth;
+      height = container.clientHeight || 440;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(newW, newH);
+      updateCameraDistance();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2));
+      renderer.setSize(width, height);
     };
     window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
 
     // 10. Animation Loop
-    let animId: number;
-    let clock = new THREE.Clock();
-    let ringScale = 1;
+    let animId = 0;
+    const timer = new THREE.Timer();
+    timer.connect(document);
+    let isVisible = false;
+    let hasEntered = false;
+    let enteredAt = 0;
+    let labelUpdateElapsed = 0;
+    let lastPinCoords: { [key: string]: { x: number; y: number; visible: boolean } } = {};
 
     const animate = () => {
+      if (!isVisible) return;
       animId = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
+      timer.update();
+      const delta = Math.min(timer.getDelta(), 0.05);
+      const elapsed = timer.getElapsed();
+      const now = performance.now();
 
-      // Smooth Lerp towards target region rotation when not actively dragging
       if (!isDraggingRef.current) {
-        globeGroup.rotation.y += (targetRotationRef.current.y - globeGroup.rotation.y) * 0.04;
-        globeGroup.rotation.x += (targetRotationRef.current.x - globeGroup.rotation.x) * 0.04;
+        if (!prefersReducedMotion) {
+          targetRotationRef.current.x = THREE.MathUtils.clamp(
+            targetRotationRef.current.x + rotationVelocityRef.current.x * delta,
+            -1.15,
+            1.15
+          );
+          targetRotationRef.current.y += rotationVelocityRef.current.y * delta;
+          const damping = Math.exp(-4.8 * delta);
+          rotationVelocityRef.current.x *= damping;
+          rotationVelocityRef.current.y *= damping;
+          if (Math.abs(rotationVelocityRef.current.x) < 0.005) rotationVelocityRef.current.x = 0;
+          if (Math.abs(rotationVelocityRef.current.y) < 0.005) rotationVelocityRef.current.y = 0;
+        }
+
+        const ease = prefersReducedMotion ? 1 : 1 - Math.exp(-8 * delta);
+        globeGroup.rotation.y += (targetRotationRef.current.y - globeGroup.rotation.y) * ease;
+        globeGroup.rotation.x += (targetRotationRef.current.x - globeGroup.rotation.x) * ease;
       }
 
-      // Animate pulsed radar rings
-      ringScale += delta * 1.5;
-      if (ringScale > 2.8) ringScale = 1;
+      if (!prefersReducedMotion && hasEntered) {
+        const entranceProgress = THREE.MathUtils.clamp((now - enteredAt) / 800, 0, 1);
+        const easedProgress = 1 - Math.pow(1 - entranceProgress, 3);
+        globeGroup.scale.setScalar(0.985 + easedProgress * 0.015);
+      }
+
       pinRings.forEach((ring) => {
-        ring.scale.set(ringScale, ringScale, 1);
-        (ring.material as THREE.MeshBasicMaterial).opacity = Math.max(0, 0.85 - (ringScale - 1) * 0.45);
+        if (prefersReducedMotion) return;
+        const phase = ((elapsed * 0.22 + ring.userData.phase) % 1 + 1) % 1;
+        ring.scale.setScalar(1 + phase * 1.6);
+        (ring.material as THREE.MeshBasicMaterial).opacity = 0.78 * (1 - phase);
       });
 
-      // Animate dashed arc flow
-      arcLines.forEach((line) => {
+      arcLines.forEach((line, index) => {
         const mat = line.material as THREE.LineDashedMaterial;
-        mat.dashSize = 4 + Math.sin(clock.getElapsedTime() * 3) * 0.5;
+        const progress = prefersReducedMotion
+          ? 1
+          : THREE.MathUtils.clamp((now - enteredAt - index * 160) / 1050, 0, 1);
+        line.geometry.setDrawRange(0, Math.floor((line.geometry.attributes.position.count) * progress));
+        if (!prefersReducedMotion && progress >= 1) {
+          mat.dashSize = 4 + Math.sin(elapsed * 1.2 + index) * 0.25;
+        }
       });
 
-      // Project 3D Pin Coordinates to 2D Screen Space for Interactive Badges
-      const newCoords: { [key: string]: { x: number; y: number; visible: boolean } } = {};
-      const tempVec = new THREE.Vector3();
-
-      LOCATIONS.forEach((loc) => {
-        const localPos = latLonToVector3(loc.lat, loc.lon, GLOBE_RADIUS + 4);
-        localPos.applyMatrix4(globeGroup.matrixWorld);
-
-        // Check if facing camera (dot product with camera ray)
-        tempVec.copy(localPos).project(camera);
-        const isFacing = localPos.z > 0;
-
-        const screenX = ((tempVec.x + 1) * width) / 2;
-        const screenY = ((-tempVec.y + 1) * height) / 2;
-
-        newCoords[loc.id] = {
-          x: screenX,
-          y: screenY,
-          visible: isFacing && screenX > 20 && screenX < width - 20 && screenY > 20 && screenY < height - 20,
-        };
+      pinCores.forEach(({ mesh, material }, index) => {
+        const selected = LOCATIONS[index].id === activePinIdRef.current;
+        const targetScale = selected ? 1.28 : 1;
+        const currentScale = mesh.scale.x;
+        mesh.scale.setScalar(currentScale + (targetScale - currentScale) * (1 - Math.exp(-10 * delta)));
+        material.color.setHex(selected ? 0xfff2df : 0xdfba79);
       });
 
-      setPinScreenCoords(newCoords);
+      labelUpdateElapsed += delta;
+      if (labelUpdateElapsed >= 1 / 30) {
+        labelUpdateElapsed = 0;
+        globeGroup.updateMatrixWorld(true);
+        camera.updateMatrixWorld(true);
+        const newCoords: { [key: string]: { x: number; y: number; visible: boolean } } = {};
+        const tempVec = new THREE.Vector3();
+        let changed = false;
+
+        LOCATIONS.forEach((loc) => {
+          const localPos = latLonToVector3(loc.lat, loc.lon, GLOBE_RADIUS + 4);
+          localPos.applyMatrix4(globeGroup.matrixWorld);
+          tempVec.copy(localPos).project(camera);
+          const isFacing = localPos.z > 0;
+
+          const screenX = ((tempVec.x + 1) * width) / 2;
+          const screenY = ((-tempVec.y + 1) * height) / 2;
+
+          newCoords[loc.id] = {
+            x: screenX,
+            y: screenY,
+            visible: isFacing && screenX > 20 && screenX < width - 20 && screenY > 20 && screenY < height - 20,
+          };
+          const previous = lastPinCoords[loc.id];
+          if (!previous || previous.visible !== newCoords[loc.id].visible ||
+            Math.abs(previous.x - screenX) > 0.5 || Math.abs(previous.y - screenY) > 0.5) {
+            changed = true;
+          }
+        });
+
+        if (changed) {
+          lastPinCoords = newCoords;
+          setPinScreenCoords(newCoords);
+        }
+      }
       renderer.render(scene, camera);
     };
 
-    animate();
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        if (!hasEntered) {
+          hasEntered = true;
+          enteredAt = performance.now();
+          requestAnimationFrame(() => {
+            renderer.domElement.style.opacity = '1';
+          });
+        }
+        if (!animId) {
+          timer.reset();
+          animate();
+        }
+      } else if (animId) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+        timer.reset();
+      }
+    }, { threshold: 0.04 });
+    intersectionObserver.observe(container);
 
     return () => {
+      isVisible = false;
       cancelAnimationFrame(animId);
+      intersectionObserver.disconnect();
+      resizeObserver.disconnect();
+      timer.dispose();
       window.removeEventListener('resize', handleResize);
-      domEl.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      domEl.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-
-      sphereGeo.dispose();
-      sphereMat.dispose();
+      domEl.removeEventListener('pointerdown', handlePointerDown);
+      domEl.removeEventListener('pointermove', handlePointerMove);
+      domEl.removeEventListener('pointerup', handlePointerUp);
+      domEl.removeEventListener('pointercancel', handlePointerCancel);
+      globeGroup.traverse((object) => {
+        if (object instanceof THREE.Mesh || object instanceof THREE.Line) {
+          object.geometry.dispose();
+          const materials = Array.isArray(object.material) ? object.material : [object.material];
+          materials.forEach((material) => material.dispose());
+        }
+      });
       worldTexture.dispose();
-      atmosGeo.dispose();
-      atmosMat.dispose();
       renderer.dispose();
+      globeGroupRef.current = null;
       if (domEl.parentNode) {
         domEl.parentNode.removeChild(domEl);
       }
@@ -553,9 +675,9 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
   }, []);
 
   return (
-    <div className="planet-globe-wrapper" ref={mountRef}>
+    <div className="planet-globe-wrapper" ref={mountRef} data-cursor="drag">
       {/* Interactive 3D Screen Overlay Badges */}
-      {LOCATIONS.map((loc) => {
+      {LOCATIONS.map((loc, index) => {
         const coord = pinScreenCoords[loc.id];
         if (!coord || !coord.visible) return null;
         const isSelected = activePinId === loc.id;
@@ -565,9 +687,12 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
           <button
             key={loc.id}
             type="button"
+            aria-label={`Show ${loc.city} details`}
+            aria-pressed={isSelected}
             className={`globe-pin-label ${isSelected ? 'active' : ''} ${isDubai ? 'dubai-hub' : ''}`}
             style={{
               transform: `translate3d(${coord.x}px, ${coord.y}px, 0)`,
+              animationDelay: `${index * 110}ms`,
             }}
             onClick={() => onSelectPin(loc.id, loc.region)}
           >
@@ -576,6 +701,20 @@ export const PlanetGlobe: React.FC<PlanetGlobeProps> = ({
           </button>
         );
       })}
+
+      <div className="globe-location-controls" role="group" aria-label="Select a location">
+        {LOCATIONS.map((loc) => (
+          <button
+            key={loc.id}
+            type="button"
+            className={`globe-location-control ${activePinId === loc.id ? 'active' : ''}`}
+            aria-pressed={activePinId === loc.id}
+            onClick={() => onSelectPin(loc.id, loc.region)}
+          >
+            {loc.city}
+          </button>
+        ))}
+      </div>
 
       {/* Orbit Helper Instruction */}
       <div className="globe-drag-hint" aria-hidden="true">
