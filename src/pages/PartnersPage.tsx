@@ -88,7 +88,7 @@ export const PartnersPage: React.FC = () => {
                       className="btn btn-gold"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                     >
-                      <span>Contact {displayName}</span>
+                      <span>{p.id === 'yogesh' ? 'Explore His Journey' : `Explore ${displayName}`}</span>
                       <svg
                         width="14"
                         height="14"
