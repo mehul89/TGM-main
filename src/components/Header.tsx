@@ -36,12 +36,27 @@ export const Header: React.FC = () => {
           </Link>
 
           <nav className="main-nav" aria-label="Main Navigation">
+            <Link
+              to="/about"
+              className="nav-link"
+              aria-current={isAbout ? 'page' : undefined}
+            >
+              About us
+            </Link>
+            <Link
+              to="/partners"
+              className="nav-link"
+              aria-current={isPartners ? 'page' : undefined}
+            >
+              Partners
+            </Link>
+
             {/* Services with Dropdown */}
             <div className="nav-dropdown-wrapper">
               <Link
                 to="/#services"
                 className="nav-dropdown-trigger"
-                aria-current={isServices ? 'page' : undefined}
+                aria-current={isServices && !isAfrica ? 'page' : undefined}
               >
                 <span>Services</span>
                 <svg
@@ -76,28 +91,14 @@ export const Header: React.FC = () => {
               className="nav-link"
               aria-current={isAfrica ? 'page' : undefined}
             >
-              UAE–Africa
-            </Link>
-            <Link
-              to="/about"
-              className="nav-link"
-              aria-current={isAbout ? 'page' : undefined}
-            >
-              About
-            </Link>
-            <Link
-              to="/partners"
-              className="nav-link"
-              aria-current={isPartners ? 'page' : undefined}
-            >
-              Partners
+              UAE Africa Corridor
             </Link>
             <Link
               to="/contact"
               className="nav-link"
               aria-current={isContact ? 'page' : undefined}
             >
-              Contact
+              Contact us
             </Link>
           </nav>
 
@@ -190,6 +191,30 @@ export const Header: React.FC = () => {
           }}
         >
           <Link
+            to="/about"
+            onClick={closeMobile}
+            style={{
+              color: 'var(--ivory)',
+              fontSize: '17px',
+              fontWeight: 600,
+              padding: '8px 0',
+            }}
+          >
+            About us
+          </Link>
+          <Link
+            to="/partners"
+            onClick={closeMobile}
+            style={{
+              color: 'var(--ivory)',
+              fontSize: '17px',
+              fontWeight: 600,
+              padding: '8px 0',
+            }}
+          >
+            Partners
+          </Link>
+          <Link
             to="/#services"
             onClick={closeMobile}
             style={{
@@ -199,7 +224,7 @@ export const Header: React.FC = () => {
               padding: '8px 0',
             }}
           >
-            Services Overview
+            Services
           </Link>
           <div
             style={{
@@ -236,31 +261,7 @@ export const Header: React.FC = () => {
               marginTop: '8px',
             }}
           >
-            UAE–Africa Corridor
-          </Link>
-          <Link
-            to="/about"
-            onClick={closeMobile}
-            style={{
-              color: 'var(--ivory)',
-              fontSize: '17px',
-              fontWeight: 600,
-              padding: '8px 0',
-            }}
-          >
-            About
-          </Link>
-          <Link
-            to="/partners"
-            onClick={closeMobile}
-            style={{
-              color: 'var(--ivory)',
-              fontSize: '17px',
-              fontWeight: 600,
-              padding: '8px 0',
-            }}
-          >
-            Partners
+            UAE Africa Corridor
           </Link>
           <Link
             to="/contact"
@@ -272,7 +273,7 @@ export const Header: React.FC = () => {
               padding: '8px 0',
             }}
           >
-            Contact
+            Contact us
           </Link>
         </nav>
 

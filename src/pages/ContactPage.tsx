@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SITE_CONFIG } from '../data/siteConfig';
+import { ContactEnquiryForm } from '../components/ContactEnquiryForm';
 
 export const ContactPage: React.FC = () => {
-  const [businessType, setBusinessType] = useState('');
-  const [turnover, setTurnover] = useState('');
-  const [software, setSoftware] = useState('');
-  const [promptReason, setPromptReason] = useState('');
-  const [contactName, setContactName] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-
   useEffect(() => {
     document.title = 'Contact | TGM Accounting & Auditing, Al Mankhool, Dubai';
   }, []);
-
-  const handleQuickPrep = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = encodeURIComponent(
-      `Hello TGM Accounting & Auditing,\n\nI would like to schedule a 20-min consultation.\n\nName / Organization: ${contactName || 'Business Owner'}\nIndustry & Countries: ${businessType || 'SME'}\nApprox Turnover / Entities: ${turnover || 'Not specified'}\nAccounting Software: ${software || 'Not specified'}\nPrimary Objective: ${promptReason || 'Finance Review / Audit Readiness'}`
-    );
-    window.open(`${SITE_CONFIG.wa}?text=${text}`, '_blank');
-    setSubmitted(true);
-  };
 
   return (
     <main id="main">
@@ -151,134 +136,7 @@ export const ContactPage: React.FC = () => {
               </li>
             </ul>
 
-            <form
-              onSubmit={handleQuickPrep}
-              style={{
-                marginTop: '32px',
-                borderTop: '1px solid var(--border)',
-                paddingTop: '24px',
-                display: 'grid',
-                gap: '14px',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  color: 'var(--forest-dark)',
-                  margin: 0,
-                  letterSpacing: '0.02em',
-                }}
-              >
-                Instant Consultation Briefing:
-              </p>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Your Name / Organization"
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    backgroundColor: 'var(--cream)',
-                    color: 'var(--text-dark)',
-                    fontFamily: 'inherit',
-                    fontSize: '14px',
-                    outline: 'none',
-                  }}
-                />
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <input
-                  type="text"
-                  placeholder="Turnover / No. of entities"
-                  value={turnover}
-                  onChange={(e) => setTurnover(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    backgroundColor: 'var(--cream)',
-                    color: 'var(--text-dark)',
-                    fontFamily: 'inherit',
-                    fontSize: '14px',
-                    outline: 'none',
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Accounting Software"
-                  value={software}
-                  onChange={(e) => setSoftware(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    backgroundColor: 'var(--cream)',
-                    color: 'var(--text-dark)',
-                    fontFamily: 'inherit',
-                    fontSize: '14px',
-                    outline: 'none',
-                  }}
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Industry & Countries (e.g. Trading, UAE & Tanzania)"
-                  value={businessType}
-                  onChange={(e) => setBusinessType(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    backgroundColor: 'var(--cream)',
-                    color: 'var(--text-dark)',
-                    fontFamily: 'inherit',
-                    fontSize: '14px',
-                    outline: 'none',
-                  }}
-                />
-              </div>
-              <div>
-                <textarea
-                  rows={2}
-                  placeholder="What prompted you to get in touch?"
-                  value={promptReason}
-                  onChange={(e) => setPromptReason(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    backgroundColor: 'var(--cream)',
-                    color: 'var(--text-dark)',
-                    fontFamily: 'inherit',
-                    fontSize: '14px',
-                    resize: 'vertical',
-                    outline: 'none',
-                  }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-gold"
-                style={{ width: '100%', cursor: 'pointer', marginTop: '6px' }}
-              >
-                Generate Briefing via WhatsApp
-              </button>
-              {submitted && (
-                <p style={{ margin: '6px 0 0', fontSize: '13px', color: 'var(--forest)', fontWeight: 600 }}>
-                  Connecting directly to WhatsApp with your consultation details...
-                </p>
-              )}
-            </form>
+            <ContactEnquiryForm />
 
             <p className="small muted" style={{ margin: '24px 0 0', lineHeight: '20px' }}>
               We treat all financial records and disclosures with strict institutional confidentiality. No entries or configurations in your systems are altered.

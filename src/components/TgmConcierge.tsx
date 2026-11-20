@@ -1,13 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CONCIERGE_QUESTIONS, ConciergeQuestion } from '../data/conciergeFaq';
+import { ContactEnquiryForm } from './ContactEnquiryForm';
+
+interface ActiveConversation {
+  questionText: string;
+  answerText: string;
+  isCustom: boolean;
+}
+
+const RELATIONSHIP_MANAGER_MESSAGE =
+  'For specific questions outside our standard overview topics, please contact our Relationship Manager or advisory agent directly. Kindly complete the consultation form below and our team will respond promptly.';
 
 export const TgmConcierge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<ConciergeQuestion | null>(null);
+  const [activeConversation, setActiveConversation] = useState<ActiveConversation | null>(null);
+  const [customInput, setCustomInput] = useState('');
   const [displayedAnswer, setDisplayedAnswer] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [showTypingDots, setShowTypingDots] = useState<boolean>(false);
-  const [showWhatsAppCta, setShowWhatsAppCta] = useState<boolean>(false);
+  const [showFollowUpCta, setShowFollowUpCta] = useState<boolean>(false);
+  const [showTemplateForm, setShowTemplateForm] = useState<boolean>(false);
   const [hasUnreadNotification, setHasUnreadNotification] = useState<boolean>(true);
 
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -15,7 +27,6 @@ export const TgmConcierge: React.FC = () => {
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll inside chat body
   const scrollToBottom = (smooth = true) => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
@@ -27,9 +38,8 @@ export const TgmConcierge: React.FC = () => {
 
   useEffect(() => {
     scrollToBottom(true);
-  }, [displayedAnswer, showTypingDots, showWhatsAppCta, selectedQuestion]);
+  }, [displayedAnswer, showTypingDots, showFollowUpCta, showTemplateForm, activeConversation]);
 
-  // Clean up any ongoing typing animation timers
   const clearTypingTimers = () => {
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
@@ -45,28 +55,26 @@ export const TgmConcierge: React.FC = () => {
     return () => clearTypingTimers();
   }, []);
 
-  // Handle question selection and trigger typing animation
-  const handleSelectQuestion = (q: ConciergeQuestion) => {
+  const startConversationResponse = (conversation: ActiveConversation) => {
     clearTypingTimers();
-    setSelectedQuestion(q);
+    setActiveConversation(conversation);
     setDisplayedAnswer('');
-    setShowWhatsAppCta(false);
+    setShowFollowUpCta(false);
+    setShowTemplateForm(false);
     setIsTyping(true);
     setShowTypingDots(true);
 
-    // Initial brief thinking/dots pause (500ms)
     typingTimeoutRef.current = setTimeout(() => {
       setShowTypingDots(false);
-      const fullText = q.answer;
+      const fullText = conversation.answerText;
       let currentIndex = 0;
 
-      // Natural, crisp typewriter animation (fast chunked reveal)
       typingIntervalRef.current = setInterval(() => {
         currentIndex += 3;
         if (currentIndex >= fullText.length) {
           setDisplayedAnswer(fullText);
           setIsTyping(false);
-          setShowWhatsAppCta(true);
+          setShowFollowUpCta(true);
           if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
         } else {
           setDisplayedAnswer(fullText.slice(0, currentIndex));
@@ -75,14 +83,46 @@ export const TgmConcierge: React.FC = () => {
     }, 500);
   };
 
-  // Reset back to questions list
+  const handleSelectQuestion = (q: ConciergeQuestion) => {
+    startConversationResponse({
+      questionText: q.question,
+      answerText: q.answer,
+      isCustom: false,
+    });
+  };
+
+  const handleCustomQuestionSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = customInput.trim();
+    if (!trimmed) return;
+
+    const normalized = trimmed.toLowerCase();
+    const matchedTemplate = CONCIERGE_QUESTIONS.find(
+      (q) => q.question.toLowerCase() === normalized
+    );
+
+    setCustomInput('');
+
+    if (matchedTemplate) {
+      handleSelectQuestion(matchedTemplate);
+      return;
+    }
+
+    startConversationResponse({
+      questionText: trimmed,
+      answerText: RELATIONSHIP_MANAGER_MESSAGE,
+      isCustom: true,
+    });
+  };
+
   const handleBackToQuestions = () => {
     clearTypingTimers();
-    setSelectedQuestion(null);
+    setActiveConversation(null);
     setDisplayedAnswer('');
     setIsTyping(false);
     setShowTypingDots(false);
-    setShowWhatsAppCta(false);
+    setShowFollowUpCta(false);
+    setShowTemplateForm(false);
   };
 
   const toggleOpen = () => {
@@ -94,7 +134,6 @@ export const TgmConcierge: React.FC = () => {
     });
   };
 
-  // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -105,7 +144,6 @@ export const TgmConcierge: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // Build prefilled WhatsApp inquiry URL
   const getWhatsAppUrl = (questionText: string) => {
     const message = `Hello TGM Team, I visited your website and would like to know more about: ${questionText}`;
     return `https://wa.me/971553310567?text=${encodeURIComponent(message)}`;
@@ -123,12 +161,10 @@ export const TgmConcierge: React.FC = () => {
           aria-expanded={isOpen}
           title="TGM Concierge"
         >
-          {/* Subtle gold indicator dot */}
           {hasUnreadNotification && (
             <span className="concierge-launcher-badge" aria-label="New update" />
           )}
 
-          {/* Luxury Advisory Chat Emblem */}
           <div className="concierge-launcher-icon">
             <svg
               width="26"
@@ -212,15 +248,14 @@ export const TgmConcierge: React.FC = () => {
           {/* Body Content */}
           <div className="concierge-body" ref={chatBodyRef}>
             {/* VIEW A: WELCOME SCREEN & 10 QUESTION TOPIC CARDS */}
-            {!selectedQuestion && (
+            {!activeConversation && (
               <div className="concierge-welcome-view">
-                {/* Welcome Editorial Greeting */}
                 <div className="concierge-welcome-card">
                   <p className="concierge-welcome-eyebrow">Digital Advisory Desk</p>
                   <h4 className="concierge-welcome-heading">Welcome to TGM.</h4>
                   <p className="concierge-welcome-text">
-                    Discover how we support owner-run businesses and cross-border groups with
-                    transparency, governance, and institutional corporate precision.
+                    Choose a topic below or type your own question to connect directly with our
+                    Relationship Manager.
                   </p>
                   <div className="concierge-gold-rule" />
                 </div>
@@ -229,7 +264,6 @@ export const TgmConcierge: React.FC = () => {
                   <span>How can we help you today?</span>
                 </div>
 
-                {/* Question Cards List (All 10 Questions) */}
                 <div className="concierge-questions-grid">
                   {CONCIERGE_QUESTIONS.map((q) => (
                     <button
@@ -262,7 +296,6 @@ export const TgmConcierge: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Direct Assistance Prompt */}
                 <div className="concierge-direct-whatsapp">
                   <span>Need an immediate consultation?</span>
                   <a
@@ -278,12 +311,12 @@ export const TgmConcierge: React.FC = () => {
             )}
 
             {/* VIEW B: CONVERSATION VIEW */}
-            {selectedQuestion && (
+            {activeConversation && (
               <div className="concierge-conversation-view">
                 {/* User Message (Right Aligned) */}
                 <div className="concierge-message user-message">
                   <div className="concierge-bubble user-bubble">
-                    <p>{selectedQuestion.question}</p>
+                    <p>{activeConversation.questionText}</p>
                   </div>
                   <span className="concierge-message-time">You</span>
                 </div>
@@ -296,7 +329,6 @@ export const TgmConcierge: React.FC = () => {
 
                   <div className="concierge-assistant-content">
                     <div className="concierge-bubble assistant-bubble">
-                      {/* Animated Typing Dots */}
                       {showTypingDots && (
                         <div className="concierge-typing-dots" aria-label="TGM is formulating response">
                           <span className="dot dot-1" />
@@ -305,7 +337,6 @@ export const TgmConcierge: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Typed Answer Body */}
                       {displayedAnswer && (
                         <div className="concierge-answer-text">
                           <p>{displayedAnswer}</p>
@@ -317,17 +348,34 @@ export const TgmConcierge: React.FC = () => {
                       TGM Advisory Desk {isTyping && '· typing...'}
                     </span>
 
-                    {/* WhatsApp CTA Action Card (Appears after answer completes) */}
-                    {showWhatsAppCta && (
+                    {/* Custom Question -> Relationship Manager / Agent Consultation Form */}
+                    {showFollowUpCta && activeConversation.isCustom && (
+                      <div className="concierge-form-card">
+                        <div className="concierge-wa-text" style={{ marginBottom: '12px' }}>
+                          <p className="concierge-wa-title">Relationship Manager Consultation Form</p>
+                          <p className="concierge-wa-sub">
+                            Send your enquiry directly to our advisory desk by email or WhatsApp.
+                          </p>
+                        </div>
+                        <ContactEnquiryForm
+                          compact
+                          heading=""
+                          initialPrompt={activeConversation.questionText}
+                        />
+                      </div>
+                    )}
+
+                    {/* Template Question -> WhatsApp CTA + Optional Email Form Toggle */}
+                    {showFollowUpCta && !activeConversation.isCustom && (
                       <div className="concierge-whatsapp-card">
                         <div className="concierge-wa-text">
                           <p className="concierge-wa-title">Speak directly with our team</p>
                           <p className="concierge-wa-sub">
-                            Have questions specific to your business? Message our advisory desk on WhatsApp.
+                            Have questions specific to your business? Message our advisory desk on WhatsApp or send a consultation enquiry.
                           </p>
                         </div>
                         <a
-                          href={getWhatsAppUrl(selectedQuestion.question)}
+                          href={getWhatsAppUrl(activeConversation.questionText)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn-wa-concierge"
@@ -347,6 +395,24 @@ export const TgmConcierge: React.FC = () => {
                           </svg>
                           <span>Continue on WhatsApp</span>
                         </a>
+                        {!showTemplateForm ? (
+                          <button
+                            type="button"
+                            className="concierge-nav-reset-btn"
+                            style={{ width: '100%', padding: '8px 12px', color: 'var(--forest)' }}
+                            onClick={() => setShowTemplateForm(true)}
+                          >
+                            Or Contact Relationship Manager via Form
+                          </button>
+                        ) : (
+                          <div style={{ marginTop: '6px', paddingTop: '10px', borderTop: '1px solid rgba(197, 159, 90, 0.25)' }}>
+                            <ContactEnquiryForm
+                              compact
+                              heading="Send Consultation Enquiry:"
+                              initialPrompt={activeConversation.questionText}
+                            />
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -357,8 +423,8 @@ export const TgmConcierge: React.FC = () => {
             )}
           </div>
 
-          {/* Footer Bar / Navigation in Conversation Mode */}
-          {selectedQuestion && (
+          {/* Navigation Strip when inside a Conversation */}
+          {activeConversation && (
             <div className="concierge-footer-bar">
               <button
                 type="button"
@@ -391,6 +457,39 @@ export const TgmConcierge: React.FC = () => {
               </button>
             </div>
           )}
+
+          {/* Custom Question Input Bar */}
+          <form className="concierge-composer" onSubmit={handleCustomQuestionSubmit}>
+            <input
+              type="text"
+              className="concierge-composer-input"
+              placeholder="Ask a different question..."
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+              aria-label="Ask a custom question"
+            />
+            <button
+              type="submit"
+              className="concierge-composer-send"
+              disabled={!customInput.trim()}
+              aria-label="Send question"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </form>
         </div>
       )}
     </div>

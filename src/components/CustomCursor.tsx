@@ -22,8 +22,8 @@ function findInteractiveTarget(target: EventTarget | null): HTMLElement | null {
 
 export const CustomCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLSpanElement>(null);
-  const dotRef = useRef<HTMLSpanElement>(null);
+  const ringAnchorRef = useRef<HTMLSpanElement>(null);
+  const dotAnchorRef = useRef<HTMLSpanElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -32,10 +32,10 @@ export const CustomCursor: React.FC = () => {
     if (!pointerQuery.matches || motionQuery.matches) return;
 
     const cursor = cursorRef.current;
-    const ring = ringRef.current;
-    const dot = dotRef.current;
+    const ringAnchor = ringAnchorRef.current;
+    const dotAnchor = dotAnchorRef.current;
     const label = labelRef.current;
-    if (!cursor || !ring || !dot || !label) return;
+    if (!cursor || !ringAnchor || !dotAnchor || !label) return;
 
     let targetX = 0;
     let targetY = 0;
@@ -77,22 +77,20 @@ export const CustomCursor: React.FC = () => {
     };
 
     const setPosition = (element: HTMLElement, x: number, y: number) => {
-      element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     };
 
     const animateRing = () => {
       ringX += (targetX - ringX) * 0.22;
       ringY += (targetY - ringY) * 0.22;
-      setPosition(ring, ringX, ringY);
-      setPosition(label, ringX, ringY);
+      setPosition(ringAnchor, ringX, ringY);
 
       if (Math.abs(targetX - ringX) > 0.12 || Math.abs(targetY - ringY) > 0.12) {
         animationFrame = window.requestAnimationFrame(animateRing);
       } else {
         ringX = targetX;
         ringY = targetY;
-        setPosition(ring, ringX, ringY);
-        setPosition(label, ringX, ringY);
+        setPosition(ringAnchor, ringX, ringY);
         animationFrame = 0;
       }
     };
@@ -101,13 +99,12 @@ export const CustomCursor: React.FC = () => {
       if (event.pointerType !== 'mouse') return;
       targetX = event.clientX;
       targetY = event.clientY;
-      setPosition(dot, targetX, targetY);
+      setPosition(dotAnchor, targetX, targetY);
 
       if (!hasPosition) {
         ringX = targetX;
         ringY = targetY;
-        setPosition(ring, ringX, ringY);
-        setPosition(label, ringX, ringY);
+        setPosition(ringAnchor, ringX, ringY);
         hasPosition = true;
       }
 
@@ -128,6 +125,15 @@ export const CustomCursor: React.FC = () => {
 
     const handlePointerDown = (event: PointerEvent) => {
       if (event.pointerType !== 'mouse') return;
+      if (!hasPosition) {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        ringX = targetX;
+        ringY = targetY;
+        setPosition(dotAnchor, targetX, targetY);
+        setPosition(ringAnchor, ringX, ringY);
+        hasPosition = true;
+      }
       cursor.classList.add('is-pressed');
       if (mode === 'drag') {
         cursor.dataset.mode = 'grabbing';
@@ -179,9 +185,13 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <div ref={cursorRef} className="tgm-custom-cursor" aria-hidden="true">
-      <span ref={ringRef} className="tgm-custom-cursor-ring" />
-      <span ref={dotRef} className="tgm-custom-cursor-dot" />
-      <span ref={labelRef} className="tgm-custom-cursor-label" />
+      <span ref={ringAnchorRef} className="tgm-custom-cursor-anchor">
+        <span className="tgm-custom-cursor-ring" />
+        <span ref={labelRef} className="tgm-custom-cursor-label" />
+      </span>
+      <span ref={dotAnchorRef} className="tgm-custom-cursor-anchor">
+        <span className="tgm-custom-cursor-dot" />
+      </span>
     </div>
   );
 };
