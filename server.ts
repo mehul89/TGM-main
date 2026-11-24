@@ -90,50 +90,8 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '100kb' }));
 
-  app.get('/api/health', async (req: Request, res: Response) => {
+  app.get('/api/health', (_req: Request, res: Response) => {
     const smtp = getSmtpConfig();
-    if (!IS_PROD && req.query.verify === '1') {
-      if (!smtp.isConfigured) {
-        res.json({ ok: true, smtpConfigured: false, smtpVerified: false });
-        return;
-      }
-      try {
-        const transporter = nodemailer.createTransport({
-          host: smtp.host,
-          port: smtp.port,
-          secure: smtp.secure,
-          requireTLS: !smtp.secure,
-          auth: { user: smtp.user, pass: smtp.pass },
-          connectionTimeout: 10000,
-          greetingTimeout: 10000,
-          socketTimeout: 15000,
-        });
-        await transporter.verify();
-        res.json({
-          ok: true,
-          smtpConfigured: true,
-          smtpVerified: true,
-          host: smtp.host,
-          port: smtp.port,
-          secure: smtp.secure,
-        });
-      } catch (error) {
-        const errMeta = error as { code?: string; responseCode?: number; command?: string; message?: string };
-        res.json({
-          ok: true,
-          smtpConfigured: true,
-          smtpVerified: false,
-          host: smtp.host,
-          port: smtp.port,
-          secure: smtp.secure,
-          code: errMeta?.code,
-          responseCode: errMeta?.responseCode,
-          command: errMeta?.command,
-          message: errMeta?.message || 'SMTP verification failed',
-        });
-      }
-      return;
-    }
     res.json({ ok: true, smtpConfigured: smtp.isConfigured });
   });
 
