@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import type { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
@@ -7,6 +7,15 @@ import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load .env from project root (not cwd) so SMTP works regardless of start directory.
+const envPath = path.resolve(__dirname, '.env');
+const envResult = dotenv.config({ path: envPath });
+if (envResult.error) {
+  console.warn(`[env] Could not load ${envPath}: ${envResult.error.message}`);
+} else {
+  console.log(`[env] Loaded ${envPath}`);
+}
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
@@ -20,6 +29,8 @@ interface ContactPayload {
   turnover?: string;
   software?: string;
   promptReason?: string;
+  /** Honeypot — must stay empty. Prefer tgm_hp; website kept for older clients. */
+  tgm_hp?: string;
   website?: string;
 }
 
@@ -111,8 +122,18 @@ async function startServer() {
 
     const body = (req.body || {}) as ContactPayload;
 
-    // Honeypot anti-spam trap
-    if (typeof body.website === 'string' && body.website.trim().length > 0) {
+    // Honeypot anti-spam trap (must stay empty).
+    // Note: older clients used `website`, which browsers often autofill — that caused
+    // false "success" with no email. Prefer `tgm_hp`; only treat clearly bot-like website values.
+    const honeypotHp = typeof body.tgm_hp === 'string' ? body.tgm_hp.trim() : '';
+    const honeypotWebsite = typeof body.website === 'string' ? body.website.trim() : '';
+    const websiteLooksLikeBot =
+      honeypotWebsite.length > 0 &&
+      (/https?:\/\//i.test(honeypotWebsite) ||
+        honeypotWebsite.includes('.') ||
+        honeypotWebsite.length > 40);
+    if (honeypotHp || websiteLooksLikeBot) {
+      console.warn('[contact] Honeypot triggered — enquiry discarded (no email sent)');
       res.status(200).json({ ok: true, message: 'Enquiry received.' });
       return;
     }
@@ -232,13 +253,21 @@ async function startServer() {
         </div>
       `;
 
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: { name: smtp.fromName, address: smtp.fromEmail },
         to: smtp.recipient,
         replyTo: { name: contactName, address: contactEmail },
         subject: `New Consultation Enquiry: ${contactName} — TGM`,
         text: plainText,
         html: htmlBody,
+      });
+
+      console.log('[contact] Enquiry email sent', {
+        to: smtp.recipient,
+        from: smtp.fromEmail,
+        messageId: info.messageId,
+        accepted: info.accepted,
+        response: info.response,
       });
 
       res.status(200).json({
@@ -277,7 +306,11 @@ async function startServer() {
   }
 
   app.listen(PORT, HOST, () => {
+    const smtp = getSmtpConfig();
     console.log(`TGM server listening on http://${HOST}:${PORT}`);
+    console.log(
+      `[SMTP] configured=${smtp.isConfigured} host=${smtp.host} user=${smtp.user || '(missing)'} recipient=${smtp.recipient}`
+    );
   });
 }
 

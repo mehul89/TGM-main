@@ -19,7 +19,9 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
   const [turnover, setTurnover] = useState('');
   const [software, setSoftware] = useState('');
   const [promptReason, setPromptReason] = useState(initialPrompt);
-  const [website, setWebsite] = useState('');
+  // Honeypot — obscure name so browsers/password managers do not autofill it
+  // (autofilled `website` previously caused fake success with no email).
+  const [honeypot, setHoneypot] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | 'whatsapp';
@@ -61,7 +63,7 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
           turnover,
           software,
           promptReason,
-          website,
+          tgm_hp: honeypot,
         }),
       });
 
@@ -88,7 +90,7 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
       setTurnover('');
       setSoftware('');
       setPromptReason('');
-      setWebsite('');
+      setHoneypot('');
     } catch {
       setSubmitStatus({
         type: 'error',
@@ -138,7 +140,7 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
         </p>
       )}
 
-      {/* Honeypot anti-spam field */}
+      {/* Honeypot anti-spam field — leave empty; hidden from users & autofill */}
       <div
         aria-hidden="true"
         style={{
@@ -149,15 +151,22 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
           overflow: 'hidden',
         }}
       >
-        <label htmlFor={compact ? 'concierge-contact-website' : 'contact-website'}>Website</label>
+        <label htmlFor={compact ? 'concierge-tgm-hp' : 'contact-tgm-hp'}>Do not fill</label>
         <input
-          id={compact ? 'concierge-contact-website' : 'contact-website'}
+          id={compact ? 'concierge-tgm-hp' : 'contact-tgm-hp'}
           type="text"
-          name="website"
+          name="tgm_hp"
           tabIndex={-1}
-          autoComplete="off"
-          value={website}
-          onChange={(e) => setWebsite(e.target.value)}
+          autoComplete="nope"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          data-lpignore="true"
+          data-1p-ignore="true"
+          data-bwignore="true"
+          data-form-type="other"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
         />
       </div>
 
