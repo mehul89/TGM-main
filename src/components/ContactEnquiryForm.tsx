@@ -67,6 +67,16 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
         }),
       });
 
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        setSubmitStatus({
+          type: 'error',
+          message:
+            'Unable to reach the enquiry server right now. Please try again shortly or reach us on WhatsApp.',
+        });
+        return;
+      }
+
       const data = (await response.json()) as { ok?: boolean; message?: string; error?: string };
 
       if (!response.ok) {

@@ -1,5 +1,6 @@
 node_modules
 dist
+server.mjs
 .vite
 .DS_Store
 npm-debug.log*

@@ -7,8 +7,10 @@ import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const entryName = path.basename(__filename);
 
 // Load .env from project root (not cwd) so SMTP works regardless of start directory.
+// On Hostinger, panel env vars are already injected into process.env.
 const envPath = path.resolve(__dirname, '.env');
 const envResult = dotenv.config({ path: envPath });
 if (envResult.error) {
@@ -19,7 +21,12 @@ if (envResult.error) {
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const IS_PROD = process.env.NODE_ENV === 'production';
+// Hostinger runs the entry file with `node server.mjs` and may omit NODE_ENV.
+// Treat the compiled entry as production so we serve `dist/` instead of loading Vite.
+const IS_PROD =
+  process.env.NODE_ENV === 'production' ||
+  entryName === 'server.mjs' ||
+  entryName === 'server.js';
 
 interface ContactPayload {
   contactName?: string;
@@ -300,7 +307,11 @@ async function startServer() {
   } else {
     const distDir = path.resolve(__dirname, 'dist');
     app.use(express.static(distDir));
-    app.use((_req: Request, res: Response) => {
+    app.use((req: Request, res: Response) => {
+      if (req.path.startsWith('/api/')) {
+        res.status(404).json({ error: 'API route not found.' });
+        return;
+      }
       res.sendFile(path.join(distDir, 'index.html'));
     });
   }
