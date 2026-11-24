@@ -42,17 +42,34 @@ function sanitizeMultiline(value: unknown, maxLength: number): string {
   return value.trim().slice(0, maxLength);
 }
 
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 10;
+const contactRateLimit = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(clientKey: string): boolean {
+  const now = Date.now();
+  const entry = contactRateLimit.get(clientKey);
+  if (!entry || now > entry.resetAt) {
+    contactRateLimit.set(clientKey, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
 function getSmtpConfig() {
+  const host = (process.env.SMTP_HOST || 'smtppro.zoho.com').trim();
   const user = (process.env.SMTP_USER || '').trim();
-  const pass = (process.env.SMTP_APP_PASSWORD || process.env.SMTP_PASS || '')
-    .replace(/\s+/g, '')
-    .trim();
-  const host = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
+  const rawPass = process.env.SMTP_APP_PASSWORD || process.env.SMTP_PASS || '';
+  const pass = host.toLowerCase().includes('gmail')
+    ? rawPass.replace(/\s+/g, '').trim()
+    : rawPass.trim();
   const port = Number(process.env.SMTP_PORT) || 465;
   const secure =
-    process.env.SMTP_SECURE !== undefined
-      ? process.env.SMTP_SECURE.toLowerCase() === 'true'
+    process.env.SMTP_SECURE !== undefined && process.env.SMTP_SECURE.trim() !== ''
+      ? process.env.SMTP_SECURE.trim().toLowerCase() === 'true'
       : port === 465;
+  const fromEmail = (process.env.SMTP_FROM_EMAIL || user).trim();
   const recipient = (process.env.CONTACT_RECIPIENT_EMAIL || user || 'info@tgmauditing.com').trim();
   const fromName = sanitizeSingleLine(process.env.SMTP_FROM_NAME || 'TGM Accounting & Auditing', 100);
 
@@ -62,9 +79,10 @@ function getSmtpConfig() {
     secure,
     user,
     pass,
+    fromEmail,
     recipient,
     fromName,
-    isConfigured: Boolean(user && pass),
+    isConfigured: Boolean(host && user && pass),
   };
 }
 
@@ -78,6 +96,19 @@ async function startServer() {
   });
 
   app.post('/api/contact', async (req: Request, res: Response) => {
+    const forwardedFor = req.headers['x-forwarded-for'];
+    const clientIp =
+      (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor)?.split(',')[0]?.trim() ||
+      req.ip ||
+      'unknown';
+
+    if (isRateLimited(clientIp)) {
+      res.status(429).json({
+        error: 'Too many enquiries submitted recently. Please wait a few minutes or contact us on WhatsApp.',
+      });
+      return;
+    }
+
     const body = (req.body || {}) as ContactPayload;
 
     // Honeypot anti-spam trap
@@ -114,7 +145,7 @@ async function startServer() {
     if (!smtp.isConfigured) {
       res.status(503).json({
         error:
-          'SMTP email is not configured on the server yet. Please set SMTP_USER and SMTP_APP_PASSWORD in your .env file (or hosting environment variables).',
+          'SMTP email is not configured on the server yet. Please set SMTP_HOST, SMTP_USER, and SMTP_APP_PASSWORD (or SMTP_PASS) in your environment variables.',
       });
       return;
     }
@@ -124,10 +155,14 @@ async function startServer() {
         host: smtp.host,
         port: smtp.port,
         secure: smtp.secure,
+        requireTLS: !smtp.secure,
         auth: {
           user: smtp.user,
           pass: smtp.pass,
         },
+        connectionTimeout: 15000,
+        greetingTimeout: 15000,
+        socketTimeout: 20000,
       });
 
       const submittedAt = new Date().toISOString();
@@ -198,9 +233,9 @@ async function startServer() {
       `;
 
       await transporter.sendMail({
-        from: `"${smtp.fromName}" <${smtp.user}>`,
+        from: { name: smtp.fromName, address: smtp.fromEmail },
         to: smtp.recipient,
-        replyTo: `"${contactName}" <${contactEmail}>`,
+        replyTo: { name: contactName, address: contactEmail },
         subject: `New Consultation Enquiry: ${contactName} — TGM`,
         text: plainText,
         html: htmlBody,
@@ -211,7 +246,14 @@ async function startServer() {
         message: 'Thank you. Your consultation enquiry has been sent to our advisory team.',
       });
     } catch (error) {
-      console.error('[SMTP] Failed to send contact enquiry email:', error);
+      const errMeta = error as { code?: string; responseCode?: number; message?: string };
+      console.error('[SMTP] Failed to send contact enquiry email:', {
+        host: smtp.host,
+        port: smtp.port,
+        code: errMeta?.code,
+        responseCode: errMeta?.responseCode,
+        message: errMeta?.message || 'Unknown SMTP error',
+      });
       res.status(500).json({
         error:
           'We could not deliver your email right now. Please try again or reach us directly via WhatsApp.',

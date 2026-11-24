@@ -100,9 +100,10 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
   };
 
   const handleWhatsAppPrep = () => {
-    const text = encodeURIComponent(
-      `Hello TGM Accounting & Auditing,\n\nI would like to schedule a 20-min consultation.\n\nName / Organization: ${contactName || 'Business Owner'}\nEmail: ${contactEmail || 'Not specified'}\nPhone: ${contactPhone || 'Not specified'}\nIndustry & Countries: ${businessType || 'SME'}\nApprox Turnover / Entities: ${turnover || 'Not specified'}\nAccounting Software: ${software || 'Not specified'}\nPrimary Objective: ${promptReason || 'Finance Review / Audit Readiness'}`
-    );
+    const rawMessage = compact
+      ? `Hello TGM Accounting & Auditing,\n\nI would like to connect with a Relationship Manager.\n\nName: ${contactName || 'Not specified'}\nEmail: ${contactEmail || 'Not specified'}\nPhone: ${contactPhone || 'Not specified'}\nNote: ${promptReason || 'Consultation Enquiry'}`
+      : `Hello TGM Accounting & Auditing,\n\nI would like to schedule a 20-min consultation.\n\nName / Organization: ${contactName || 'Business Owner'}\nEmail: ${contactEmail || 'Not specified'}\nPhone: ${contactPhone || 'Not specified'}\nIndustry & Countries: ${businessType || 'SME'}\nApprox Turnover / Entities: ${turnover || 'Not specified'}\nAccounting Software: ${software || 'Not specified'}\nPrimary Objective: ${promptReason || 'Finance Review / Audit Readiness'}`;
+    const text = encodeURIComponent(rawMessage);
     window.open(`${SITE_CONFIG.wa}?text=${text}`, '_blank', 'noopener,noreferrer');
     setSubmitStatus({
       type: 'whatsapp',
@@ -164,7 +165,7 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
         <input
           type="text"
           required
-          placeholder="Your Name / Organization *"
+          placeholder={compact ? 'Name *' : 'Your Name / Organization *'}
           value={contactName}
           onChange={(e) => setContactName(e.target.value)}
           style={inputStyle}
@@ -180,55 +181,59 @@ export const ContactEnquiryForm: React.FC<ContactEnquiryFormProps> = ({
         <input
           type="email"
           required
-          placeholder="Email Address *"
+          placeholder={compact ? 'Email *' : 'Email Address *'}
           value={contactEmail}
           onChange={(e) => setContactEmail(e.target.value)}
           style={inputStyle}
         />
         <input
           type="tel"
-          placeholder="Phone / WhatsApp (Optional)"
+          placeholder={compact ? 'Phone' : 'Phone / WhatsApp (Optional)'}
           value={contactPhone}
           onChange={(e) => setContactPhone(e.target.value)}
           style={inputStyle}
         />
       </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: compact ? '8px' : '12px',
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Turnover / Entities"
-          value={turnover}
-          onChange={(e) => setTurnover(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          type="text"
-          placeholder="Accounting Software"
-          value={software}
-          onChange={(e) => setSoftware(e.target.value)}
-          style={inputStyle}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Industry & Countries (e.g. Trading, UAE & Tanzania)"
-          value={businessType}
-          onChange={(e) => setBusinessType(e.target.value)}
-          style={inputStyle}
-        />
-      </div>
+      {!compact && (
+        <>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px',
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Turnover / Entities"
+              value={turnover}
+              onChange={(e) => setTurnover(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Accounting Software"
+              value={software}
+              onChange={(e) => setSoftware(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Industry & Countries (e.g. Trading, UAE & Tanzania)"
+              value={businessType}
+              onChange={(e) => setBusinessType(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+        </>
+      )}
       <div>
         <textarea
-          rows={compact ? 2 : 3}
+          rows={compact ? 3 : 3}
           required
-          placeholder="What prompted you to get in touch? *"
+          placeholder={compact ? 'Note *' : 'What prompted you to get in touch? *'}
           value={promptReason}
           onChange={(e) => setPromptReason(e.target.value)}
           style={{ ...inputStyle, resize: 'vertical' }}
